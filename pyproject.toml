@@ -1,0 +1,19 @@
+[project]
+name = "kpe-flyer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "JulianJM45", email = "julian@clami.net" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "python-fasthtml>=0.14.12",
+]
+
+[project.scripts]
+kpe-flyer = "kpe_flyer:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
