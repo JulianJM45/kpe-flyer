@@ -323,13 +323,15 @@
     #move(dx: 10mm )[
     #v(10mm)
     #headline("KONTAKT", color: c_text, size: 28pt, weight: 800)
-    #text("Stammesmeisterin: " + t.sfm, size: 15pt)\
+    #text(if metadata.STAMMESMEISTERIN { "Stammesmeisterin: " } else { "Stammesmeister: " } + t.sfm, size: 15pt)\
     #box(height: 0.8em, baseline: 10%, image(assets.phone)) #t.phone \
     #box(height: 0.8em, baseline: 10%, image(assets.mail)) #t.email
     #v(15mm)
 
     // #v(10mm)
-    // #box(height: 0.8em, baseline: 10%, image(assets.instagram)) \
+    #if metadata.INSTAGRAM != "" [
+      #box(height: 0.8em, baseline: 10%, image(assets.instagram)) #metadata.INSTAGRAM \
+    ]
     #box(height: 0.8em, baseline: 10%, image(assets.youtube)) #t.youtube \
     #box(height: 0.8em, baseline: 10%, image(assets.web)) #t.web \
   ]]
