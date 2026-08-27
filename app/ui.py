@@ -1,13 +1,13 @@
 from fasthtml.common import *
 
-DEFAULTS = dict(
-    stamm="München",
-    plz="81739 München",
-    address="Maximilian-Kolbe-Allee 18",
-    grouptime="Freitag, 16.00-18.00 Uhr",
-    sfm="Vroni Spörl",
-    mail="stammstjakobus@gmail.com",
-    phone="01577774472",
+PLACEHOLDERS = dict(
+    stamm="z.B. München",
+    plz="z.B. 81739 München",
+    address="z.B. Maximilian-Kolbe-Allee 18",
+    grouptime="z.B. Freitag, 16.00-18.00 Uhr",
+    sfm="z.B. Vroni Spörl",
+    mail="z.B. stammstjakobus@gmail.com",
+    phone="z.B. 01577774472",
 )
 
 _SUBMIT_JS = Script("""
@@ -23,10 +23,10 @@ _SUBMIT_JS = Script("""
 """)
 
 
-def fld(label, name, value="", type="text", placeholder=""):
+def fld(label, name, placeholder="", type="text", required=True):
     return Div(
         Label(label, fr=name),
-        Input(type=type, name=name, id=name, value=value, placeholder=placeholder)
+        Input(type=type, name=name, id=name, placeholder=placeholder, required=required)
     )
 
 
@@ -72,20 +72,24 @@ def kpe_footer():
 
 def index_page():
     form = Form(
+        P(
+            Small("Felder mit ", Strong("*", style="color: #d02825;"), " sind Pflichtfelder"),
+            style="text-align: center; color: var(--kpe-text-muted); margin-bottom: 1.5rem;"
+        ),
         card(
             "📍",
             "Stamm & Ort",
             Div(
-                fld("Stamm", "stamm", DEFAULTS["stamm"]),
-                fld("PLZ & Ort", "plz", DEFAULTS["plz"]),
+                fld("Stamm", "stamm", PLACEHOLDERS["stamm"]),
+                fld("PLZ & Ort", "plz", PLACEHOLDERS["plz"]),
                 cls="field-grid",
             ),
-            fld("Adresse", "address", DEFAULTS["address"]),
+            fld("Adresse", "address", PLACEHOLDERS["address"]),
         ),
         card(
             "⏰",
             "Gruppenstunde",
-            fld("Treffzeit", "grouptime", DEFAULTS["grouptime"]),
+            fld("Treffzeit", "grouptime", PLACEHOLDERS["grouptime"]),
         ),
         card(
             "👤",
@@ -102,12 +106,12 @@ def index_page():
                 cls="radio-group",
             ),
             Div(
-                fld("Name", "sfm", DEFAULTS["sfm"]),
-                fld("Telefon", "phone", DEFAULTS["phone"], type="tel"),
+                fld("Name", "sfm", PLACEHOLDERS["sfm"]),
+                fld("Telefon", "phone", PLACEHOLDERS["phone"], type="tel"),
                 cls="field-grid",
             ),
-            fld("E-Mail", "mail", DEFAULTS["mail"], type="email"),
-            fld("Instagram (optional)", "instagram", "", type="text", placeholder="z.B. @kpe_muenchen"),
+            fld("E-Mail", "mail", PLACEHOLDERS["mail"], type="email"),
+            fld("Instagram (optional)", "instagram", "z.B. @kpe_muenchen", type="text", required=False),
         ),
         card(
             "⚙️",

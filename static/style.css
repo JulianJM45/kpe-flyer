@@ -133,6 +133,12 @@ label {
     margin-bottom: 0.4rem;
 }
 
+label:has(+ input[required])::after {
+    content: " *";
+    color: var(--kpe-red);
+    font-weight: 700;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="tel"] {
@@ -161,6 +167,15 @@ input::placeholder {
     color: var(--kpe-text-muted);
     opacity: 0.6;
     font-style: italic;
+}
+
+/* Required field validation */
+input:required:invalid {
+    border-color: var(--kpe-border);
+}
+
+input:required:valid {
+    border-color: #10b981;
 }
 
 .field-grid {
