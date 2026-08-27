@@ -326,12 +326,11 @@
     #text(if metadata.STAMMESMEISTERIN { "Stammesmeisterin: " } else { "Stammesmeister: " } + t.sfm, size: 15pt)\
     #box(height: 0.8em, baseline: 10%, image(assets.phone)) #t.phone \
     #box(height: 0.8em, baseline: 10%, image(assets.mail)) #t.email
-    #v(15mm)
 
-    // #v(10mm)
     #if metadata.INSTAGRAM != "" [
+      #v(7mm)
       #box(height: 0.8em, baseline: 10%, image(assets.instagram)) #metadata.INSTAGRAM \
-    ]
+    ] else [#v(15mm) ]
     #box(height: 0.8em, baseline: 10%, image(assets.youtube)) #t.youtube \
     #box(height: 0.8em, baseline: 10%, image(assets.web)) #t.web \
   ]]

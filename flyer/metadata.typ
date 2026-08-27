@@ -2,9 +2,9 @@
 #let PLZ = "81739 München"
 #let ADDRESS = "Maximilian-Kolbe-Allee 18"
 #let GROUPTIME = "Freitag, 16.00-18.00 Uhr"
-#let SFM = "Vröni Spörl"
+#let SFM = "Vroni Spörl"
 #let MAIL = "stammstjakobus@gmail.com"
 #let PHONE = "01577774472"
-#let INSTAGRAM = ""
+#let INSTAGRAM = "@muenchen"
 #let WICHTEL = false
 #let STAMMESMEISTERIN = true
