@@ -1,13 +1,13 @@
 from fasthtml.common import *
 
-DEFAULTS = dict(
-    stamm="München",
-    plz="81739 München",
-    address="Maximilian-Kolbe-Allee 18",
-    grouptime="Freitag, 16.00-18.00 Uhr",
-    sfm="Vröni Spörl",
-    mail="stammstjakobus@gmail.com",
-    phone="01577774472",
+PLACEHOLDERS = dict(
+    stamm="z.B. München",
+    plz="z.B. 81739 München",
+    address="z.B. Maximilian-Kolbe-Allee 18",
+    grouptime="z.B. Freitag, 16.00-18.00 Uhr",
+    sfm="z.B. Vroni Spörl",
+    mail="z.B. stammstjakobus@gmail.com",
+    phone="z.B. 01577774472",
 )
 
 _SUBMIT_JS = Script("""
@@ -23,62 +23,147 @@ _SUBMIT_JS = Script("""
 """)
 
 
-def fld(label, name, value="", type="text"):
-    return Div(Label(label, fr=name), Input(type=type, name=name, id=name, value=value))
+def fld(label, name, placeholder="", type="text", required=True):
+    return Div(
+        Label(label, fr=name),
+        Input(type=type, name=name, id=name, placeholder=placeholder, required=required)
+    )
 
 
 def card(icon, title, *content):
-    return Article(Header(H3(f"{icon}  {title}")), *content)
+    return Article(Header(H3(icon, " ", title)), Div(*content))
+
+
+def kpe_header():
+    return Header(
+        Div(
+            Div(
+                Img(src="/static/logo.svg", alt="KPE Logo"),
+                cls="kpe-logo-container",
+            ),
+            Div(
+                H1("Flyer Generator"),
+                P("Katholische Pfadfinderschaft Europas"),
+                cls="kpe-title",
+            ),
+            cls="container",
+        ),
+        cls="kpe-header",
+    )
+
+
+def kpe_footer():
+    return Footer(
+        Div(
+            Div(
+                Img(src="/static/logo.svg", alt="KPE Logo", cls="kpe-footer-logo"),
+                Div(
+                    "Katholische Pfadfinderschaft Europas · ",
+                    A("www.kpe.de", href="https://www.kpe.de", target="_blank"),
+                ),
+                Div("Powered by Typst"),
+                cls="kpe-footer-content",
+            ),
+            cls="container",
+        ),
+        cls="kpe-footer",
+    )
 
 
 def index_page():
     form = Form(
-        card("📍", "Stamm & Ort",
-            Div(fld("Stamm", "stamm", DEFAULTS["stamm"]),
-                fld("PLZ & Ort", "plz", DEFAULTS["plz"]), cls="field-grid"),
-            fld("Adresse", "address", DEFAULTS["address"]),
+        P(
+            Small("Felder mit ", Strong("*", style="color: #d02825;"), " sind Pflichtfelder"),
+            style="text-align: center; color: var(--kpe-text-muted); margin-bottom: 1.5rem;"
         ),
-        card("⏰", "Gruppenstunde",
-            fld("Treffzeit", "grouptime", DEFAULTS["grouptime"]),
+        card(
+            "📍",
+            "Stamm & Ort",
+            Div(
+                fld("Stamm", "stamm", PLACEHOLDERS["stamm"]),
+                fld("PLZ & Ort", "plz", PLACEHOLDERS["plz"]),
+                cls="field-grid",
+            ),
+            fld("Adresse", "address", PLACEHOLDERS["address"]),
         ),
-        card("👤", "Kontakt",
-            Div(fld("Stammesmeisterin / -meister", "sfm", DEFAULTS["sfm"]),
-                fld("Telefon", "phone", DEFAULTS["phone"], type="tel"), cls="field-grid"),
-            fld("E-Mail", "mail", DEFAULTS["mail"], type="email"),
+        card(
+            "⏰",
+            "Gruppenstunde",
+            fld("Treffzeit", "grouptime", PLACEHOLDERS["grouptime"]),
         ),
-        card("⚙️", "Optionen",
-            Label(
-                Input(type="checkbox", name="wichtel", id="wichtel"),
-                Div(Strong("Wichtel-Stufe anzeigen"),
-                    Small("Zeigt den Wichtel-Bereich (ab 4 Jahren) im Flyer"),
-                    cls="toggle-text"),
-                cls="toggle-label",
+        card(
+            "👤",
+            "Kontakt",
+            Div(
+                Label(
+                    Input(type="radio", name="geschlecht", value="weiblich", checked=True, id="sm-w"),
+                    "Stammesmeisterin",
+                ),
+                Label(
+                    Input(type="radio", name="geschlecht", value="männlich", id="sm-m"),
+                    "Stammesfeldmeister",
+                ),
+                cls="radio-group",
+            ),
+            Div(
+                fld("Name", "sfm", PLACEHOLDERS["sfm"]),
+                fld("Telefon", "phone", PLACEHOLDERS["phone"], type="tel"),
+                cls="field-grid",
+            ),
+            fld("E-Mail", "mail", PLACEHOLDERS["mail"], type="email"),
+            fld("Instagram (optional)", "instagram", "z.B. @kpe_muenchen", type="text", required=False),
+        ),
+        card(
+            "⚙️",
+            "Optionen",
+            Div(
+                Label(
+                    Input(type="checkbox", name="wichtel", id="wichtel"),
+                    Div(
+                        Strong("Wichtel-Stufe anzeigen"),
+                        Small("Zeigt den Wichtel-Bereich (ab 4 Jahren) im Flyer an"),
+                        cls="toggle-text",
+                    ),
+                ),
+                cls="toggle-row",
             ),
         ),
-        Div(Button("📄  PDF generieren", type="submit", id="submitBtn"), cls="submit-row"),
+        Div(
+            Button("📄  PDF generieren", type="submit", id="submitBtn"),
+            cls="submit-section",
+        ),
         _SUBMIT_JS,
-        method="post", action="/render", id="flyerForm",
+        method="post",
+        action="/render",
+        id="flyerForm",
     )
 
     return (
         Title("KPE Flyer Generator"),
-        Main(
-            Div(Div("KPE", cls="badge"), H1("Flyer Generator"),
-                P("Passe die Daten an und lade den personalisierten Flyer als PDF herunter."),
-                cls="hero"),
-            form,
-            P("Powered by Typst · KPE-Flyer Template", cls="footnote"),
-            cls="container",
-        ),
+        kpe_header(),
+        Main(Div(form, cls="kpe-content"), cls="container"),
+        kpe_footer(),
     )
 
 
 def error_page(msg: str):
     return (
         Title("Fehler – KPE Flyer Generator"),
+        kpe_header(),
         Main(
-            Div(H3("⚠️ Fehler beim Rendern"), Pre(msg), cls="error-box"),
-            A("← Zurück zum Formular", href="/"),
+            Div(
+                Div(
+                    H3("⚠️ Fehler beim Rendern"),
+                    Pre(msg),
+                    cls="error-box",
+                ),
+                Div(
+                    A("← Zurück zum Formular", href="/"),
+                    cls="error-actions",
+                ),
+                cls="error-container",
+            ),
             cls="container",
         ),
+        kpe_footer(),
     )
