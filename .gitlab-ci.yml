@@ -1,0 +1,44 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE: "registry.git.commtool.org:443/schuelerj/kpe-flyer:latest"
+  DOCKER_BUILDKIT: 1
+
+# Optional: CI runner tags
+.default:
+  tags:
+    - dockerD
+
+docker-build:
+  stage: build
+  extends: .default
+  image: docker:24.0.2 # Docker-in-Docker Image
+  services:
+    - docker:24.0.2-dind
+  script:
+    - echo "Logging into container registry"
+    - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
+    - echo "Building image $IMAGE"
+    - docker build -t $IMAGE .
+    - echo "Pushing image $IMAGE"
+    - docker push $IMAGE
+  only:
+    - main
+    - merge_requests
+
+# Optional: Deploy-Job (wenn du automatisches Deployment willst)
+# docker-deploy:
+#   stage: deploy
+#   extends: .default
+#   image: docker:24.0.2
+#   script:
+#     - echo "Deploying $IMAGE"
+#     - docker pull $IMAGE
+#     - docker stop kpe-flyer || true
+#     - docker rm kpe-flyer || true
+#     - docker run -d --name kpe-flyer -p 5001:5001 $IMAGE
+#   only:
+#     - main  # Deployment nur bei main-Branch, nicht bei MRs!
+#   when: manual  # Manuelles Deployment per Klick in GitLab UI
