@@ -142,6 +142,14 @@ input[type="tel"] {
     transition: all 0.2s ease;
 }
 
+input[type="radio"] {
+    accent-color: var(--kpe-blue);
+    cursor: pointer;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: 0;
+}
+
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="tel"]:focus {
@@ -206,6 +214,39 @@ input[type="tel"]:focus {
     color: var(--kpe-text-muted);
     font-size: 0.825rem;
     line-height: 1.4;
+}
+
+/* ── Radio button group ────────────────────────────────────── */
+.radio-group {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--kpe-blue-pale);
+    border: 1.5px solid #bfdbfe;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--kpe-text);
+    margin: 0;
+}
+
+.radio-group label:hover {
+    color: var(--kpe-blue);
+}
+
+@media (max-width: 480px) {
+    .radio-group {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
 }
 
 /* ── Submit button ──────────────────────────────────────────────────────── */

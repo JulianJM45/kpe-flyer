@@ -88,7 +88,18 @@ def index_page():
             "👤",
             "Kontakt",
             Div(
-                fld("Stammesmeisterin / -meister", "sfm", DEFAULTS["sfm"]),
+                Label(
+                    Input(type="radio", name="geschlecht", value="weiblich", checked=True, id="sm-w"),
+                    "Stammesmeisterin",
+                ),
+                Label(
+                    Input(type="radio", name="geschlecht", value="männlich", id="sm-m"),
+                    "Stammesfeldmeister",
+                ),
+                cls="radio-group",
+            ),
+            Div(
+                fld("Name", "sfm", DEFAULTS["sfm"]),
                 fld("Telefon", "phone", DEFAULTS["phone"], type="tel"),
                 cls="field-grid",
             ),

@@ -15,6 +15,7 @@ def render_pdf(
     mail: str,
     phone: str,
     wichtel: bool,
+    stammesmeisterin: bool,
 ) -> bytes:
     """Compile the KPE Wickelfalz flyer with typst and return raw PDF bytes."""
 
@@ -30,6 +31,7 @@ def render_pdf(
         f'#let MAIL = "{esc(mail)}"\n'
         f'#let PHONE = "{esc(phone)}"\n'
         f'#let WICHTEL = {"true" if wichtel else "false"}\n'
+        f'#let STAMMESMEISTERIN = {"true" if stammesmeisterin else "false"}\n'
     )
 
     with tempfile.TemporaryDirectory() as tmp:

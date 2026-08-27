@@ -6,3 +6,4 @@
 #let MAIL = "stammstjakobus@gmail.com"
 #let PHONE = "01577774472"
 #let WICHTEL = false
+#let STAMMESMEISTERIN = true
