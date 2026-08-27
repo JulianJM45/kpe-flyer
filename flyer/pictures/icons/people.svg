@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="223" viewBox="0 0 360 223">
+
+  <!-- Linke Person -->
+  <circle cx="87" cy="63" r="35"
+          fill="#FFFFFF"
+          stroke="#111111"
+          stroke-width="7"/>
+
+  <path d="M22 178
+           C25 139 49 111 87 111
+           C111 111 130 122 142 141
+           C134 151 128 163 126 178
+           Z"
+        fill="#FFFFFF"
+        stroke="#111111"
+        stroke-width="7"
+        stroke-linejoin="round"/>
+
+  <!-- Rechte Person -->
+  <circle cx="276" cy="63" r="35"
+        fill="#FFFFFF"
+          stroke="#111111"
+          stroke-width="7"/>
+
+  <path d="M218 141
+           C230 122 249 111 276 111
+           C314 111 337 139 341 178
+           L234 178
+           C232 163 226 151 218 141
+           Z"
+        fill="#FFFFFF"
+        stroke="#111111"
+        stroke-width="7"
+        stroke-linejoin="round"/>
+
+  <!-- Mittlere Person -->
+  <circle cx="185" cy="70" r="39"
+        fill="#FFFFFF"
+          stroke="#111111"
+          stroke-width="7"/>
+
+  <path d="M113 195
+           C115 151 142 122 185 122
+           C228 122 255 151 257 195
+           Z"
+        fill="#FFFFFF"
+        stroke="#111111"
+        stroke-width="7"
+        stroke-linejoin="round"/>
+</svg>

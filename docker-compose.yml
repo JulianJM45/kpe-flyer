@@ -1,0 +1,6 @@
+services:
+  kpe-flyer:
+    build: .
+    ports:
+      - "5001:5001"
+    restart: unless-stopped

@@ -1,0 +1,117 @@
+/* ── Brand tokens ───────────────────────────────────────────────────────── */
+:root {
+    --kpe-navy:   #4E5E7F;
+    --kpe-dark:   #2d3a52;
+    --kpe-yellow: #FFD21A;
+    --kpe-bg:     #eef2f7;
+    --kpe-muted:  #aab6c5;
+
+    /* PicoCSS primary override */
+    --pico-primary:         var(--kpe-navy);
+    --pico-primary-hover:   #3d4e6b;
+    --pico-primary-focus:   rgba(78, 94, 127, 0.25);
+    --pico-primary-inverse: #ffffff;
+}
+
+body { background: var(--kpe-bg); }
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.hero {
+    background: linear-gradient(135deg, var(--kpe-navy) 0%, var(--kpe-dark) 100%);
+    border-radius: 14px;
+    padding: 2.5rem 2rem 2.25rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #fff;
+}
+.hero .badge {
+    display: inline-block;
+    background: var(--kpe-yellow);
+    color: #202124;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.75rem;
+    border-radius: 30px;
+    margin-bottom: 0.9rem;
+}
+.hero h1  { font-size: 2rem; font-weight: 800; color: #fff; margin: 0 0 0.45rem; }
+.hero p   { color: #c0cedd; margin: 0; font-size: 0.95rem; }
+
+/* ── Section cards (PicoCSS <article>) ──────────────────────────────────── */
+article { border-radius: 12px !important; margin-bottom: 1.25rem; }
+
+article header {
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 3px solid var(--kpe-yellow);
+}
+article header h3 {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--kpe-navy);
+}
+
+/* ── Two-column input grid ───────────────────────────────────────────────── */
+.field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.25rem;
+}
+@media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; } }
+
+/* ── Wichtel checkbox row ────────────────────────────────────────────────── */
+.toggle-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.8rem 1rem;
+    background: #f4f7fb;
+    border: 1.5px solid #dde5ee;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+.toggle-label input[type=checkbox] {
+    width: 1.1rem; height: 1.1rem;
+    flex-shrink: 0; margin-top: 0.15rem;
+    accent-color: var(--kpe-navy);
+}
+.toggle-label .toggle-text { line-height: 1.4; }
+.toggle-label strong { display: block; font-size: 0.9rem; }
+.toggle-label small  { color: #777; font-size: 0.8rem; }
+
+/* ── Submit ──────────────────────────────────────────────────────────────── */
+.submit-row { text-align: center; margin-top: 0.75rem; }
+.submit-row button {
+    padding: 0.8rem 2.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(78, 94, 127, 0.3);
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.footnote {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--kpe-muted);
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* ── Error box ───────────────────────────────────────────────────────────── */
+.error-box {
+    background: #fff5f5;
+    border-left: 4px solid #D71D12;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    color: #c0392b;
+    margin-bottom: 1.5rem;
+}
+.error-box h3  { margin: 0 0 0.5rem; font-size: 1rem; }
+.error-box pre { margin: 0; font-size: 0.82rem; white-space: pre-wrap; word-break: break-word; }
