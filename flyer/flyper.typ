@@ -329,7 +329,9 @@
     #v(15mm)
 
     // #v(10mm)
-    // #box(height: 0.8em, baseline: 10%, image(assets.instagram)) \
+    #if metadata.INSTAGRAM != "" [
+      #box(height: 0.8em, baseline: 10%, image(assets.instagram)) #metadata.INSTAGRAM \
+    ]
     #box(height: 0.8em, baseline: 10%, image(assets.youtube)) #t.youtube \
     #box(height: 0.8em, baseline: 10%, image(assets.web)) #t.web \
   ]]

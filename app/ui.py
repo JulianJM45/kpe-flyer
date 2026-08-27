@@ -5,7 +5,7 @@ DEFAULTS = dict(
     plz="81739 München",
     address="Maximilian-Kolbe-Allee 18",
     grouptime="Freitag, 16.00-18.00 Uhr",
-    sfm="Vröni Spörl",
+    sfm="Vroni Spörl",
     mail="stammstjakobus@gmail.com",
     phone="01577774472",
 )
@@ -23,8 +23,11 @@ _SUBMIT_JS = Script("""
 """)
 
 
-def fld(label, name, value="", type="text"):
-    return Div(Label(label, fr=name), Input(type=type, name=name, id=name, value=value))
+def fld(label, name, value="", type="text", placeholder=""):
+    return Div(
+        Label(label, fr=name),
+        Input(type=type, name=name, id=name, value=value, placeholder=placeholder)
+    )
 
 
 def card(icon, title, *content):
@@ -104,6 +107,7 @@ def index_page():
                 cls="field-grid",
             ),
             fld("E-Mail", "mail", DEFAULTS["mail"], type="email"),
+            fld("Instagram (optional)", "instagram", "", type="text", placeholder="z.B. @kpe_muenchen"),
         ),
         card(
             "⚙️",

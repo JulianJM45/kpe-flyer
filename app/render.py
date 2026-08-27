@@ -16,6 +16,7 @@ def render_pdf(
     phone: str,
     wichtel: bool,
     stammesmeisterin: bool,
+    instagram: str = "",
 ) -> bytes:
     """Compile the KPE Wickelfalz flyer with typst and return raw PDF bytes."""
 
@@ -30,6 +31,7 @@ def render_pdf(
         f'#let SFM = "{esc(sfm)}"\n'
         f'#let MAIL = "{esc(mail)}"\n'
         f'#let PHONE = "{esc(phone)}"\n'
+        f'#let INSTAGRAM = "{esc(instagram.strip())}"\n'
         f'#let WICHTEL = {"true" if wichtel else "false"}\n'
         f'#let STAMMESMEISTERIN = {"true" if stammesmeisterin else "false"}\n'
     )

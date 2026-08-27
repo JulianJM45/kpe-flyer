@@ -27,6 +27,7 @@ async def post(request: Request):
             d.get("grouptime", ""), d.get("sfm", ""), d.get("mail", ""),
             d.get("phone", ""), "wichtel" in d,
             d.get("geschlecht", "weiblich") == "weiblich",
+            d.get("instagram", ""),
         )
     except Exception as exc:
         return error_page(str(exc))

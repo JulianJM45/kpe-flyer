@@ -157,6 +157,12 @@ input[type="tel"]:focus {
     box-shadow: 0 0 0 3px var(--pico-primary-focus);
 }
 
+input::placeholder {
+    color: var(--kpe-text-muted);
+    opacity: 0.6;
+    font-style: italic;
+}
+
 .field-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

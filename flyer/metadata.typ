@@ -5,5 +5,6 @@
 #let SFM = "Vröni Spörl"
 #let MAIL = "stammstjakobus@gmail.com"
 #let PHONE = "01577774472"
+#let INSTAGRAM = ""
 #let WICHTEL = false
 #let STAMMESMEISTERIN = true
