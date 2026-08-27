@@ -2,6 +2,8 @@
 
 Web-App zum Anpassen und Rendern des KPE Wickelfalz-Flyers als PDF.
 
+**Design:** Inspiriert von [kpe.de](https://www.kpe.de) mit offiziellen KPE-Farben (Blau & Gold) und Lilien-Logo.
+
 ## Voraussetzungen (lokal)
 
 - Python ≥ 3.12 & [uv](https://docs.astral.sh/uv/)
@@ -14,7 +16,7 @@ Web-App zum Anpassen und Rendern des KPE Wickelfalz-Flyers als PDF.
 uv sync
 
 # App starten (http://localhost:5001)
-python -m app.main
+uv run main.py
 ```
 
 ## Mit Docker starten
