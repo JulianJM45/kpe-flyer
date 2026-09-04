@@ -5,7 +5,7 @@ DEFAULTS = dict(
     plz="81739 München",
     address="Maximilian-Kolbe-Allee 18",
     grouptime="Freitag, 16.00-18.00 Uhr",
-    sfm="Vröni Spörl",
+    sfm="Vroni Spörl",
     mail="stammstjakobus@gmail.com",
     phone="01577774472",
 )
