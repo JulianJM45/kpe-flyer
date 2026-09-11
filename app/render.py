@@ -15,6 +15,9 @@ def render_pdf(
     mail: str,
     phone: str,
     wichtel: bool,
+    two_weeks: bool,
+    stammesmeisterin: bool,
+    instagram: str = "",
 ) -> bytes:
     """Compile the KPE Wickelfalz flyer with typst and return raw PDF bytes."""
 
@@ -29,7 +32,10 @@ def render_pdf(
         f'#let SFM = "{esc(sfm)}"\n'
         f'#let MAIL = "{esc(mail)}"\n'
         f'#let PHONE = "{esc(phone)}"\n'
+        f'#let INSTAGRAM = "{esc(instagram.strip())}"\n'
         f'#let WICHTEL = {"true" if wichtel else "false"}\n'
+        f'#let twoWEEKS = {"true" if two_weeks else "false"}\n'
+        f'#let STAMMESMEISTERIN = {"true" if stammesmeisterin else "false"}\n'
     )
 
     with tempfile.TemporaryDirectory() as tmp:
@@ -45,7 +51,7 @@ def render_pdf(
                 "compile",
                 "--font-path",
                 str(flyer_tmp / "fonts"),
-                "flyper.typ",
+                "flyer.typ",
                 str(out_pdf),
             ],
             cwd=str(flyer_tmp),

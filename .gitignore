@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+.sesskey
+
+# Generated PDF files
+*.pdf

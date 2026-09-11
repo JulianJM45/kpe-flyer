@@ -1,0 +1,8 @@
+[package]
+name = "textpolyblock"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Anonymous"]
+license = "MIT"
+description = "Block-artiges Element mit frei definierbarer Polygon-Kontur: Text wird automatisch umgebrochen und die Schriftgröße bei Bedarf verkleinert, damit er hineinpasst."
+compiler = "0.13.0"
