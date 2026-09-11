@@ -1,3 +1,4 @@
+#import "textpolyblock/lib.typ": polyblock
 // -----------------------------------------------------------------------------
 // KPE DIN-lang Wickelfalz-Flyer – editierbares Typst-Template
 // Format: 2 x A4 quer, jeweils 3 Paneele à 99 mm = 6 DIN-lang-Seiten.
@@ -6,15 +7,12 @@
 //
 
 #let show-fold-lines = false
-#let transp1 = "pictures/FlyerHh1-transparent.jpeg"
-#let transp2 = "pictures/FlyerHh2-transparent.jpeg"
 
 // ===== EDITIERBEREICH =========================================================
 
 #import "metadata.typ"
 
 #let assets = (
-  outside_photo: "pictures/BuWaAÖ.jpeg",
   lily: "pictures/Lilie.svg",
   qr-code: "pictures/qrcode-kpe.svg",
   compass: "pictures/compass-transparent.svg",
@@ -28,7 +26,8 @@
   youtube: "pictures/icons/youtube.svg",
 )
 #let pictures = (
-  woelflinge: "pictures/Wölflinge.png",
+  outside_photo: "pictures/BuWaAÖ.jpeg",
+  woelflinge: "pictures/Wölflinge.jpeg",
   pfadi: "pictures/Pfadfinder.png",
   raider: "pictures/Raider2.jpg",
 )
@@ -52,7 +51,7 @@
   ranger_age: "ab 17 Jahren",
   // ranger_body: [Als Teil der Union Internationale des Guides et Scouts d'Europe führen unsere Lager über Grenzen hinweg. Dabei lernen wir fremde Kulturen kennen, knüpfen Freundschaften\ und erleben ein lebendiges Europa.],
   // ranger_body: [Selbstverantwortung,\ geimeinsam unterwegs,\ sozialer Einsatz,\ vom Glauben\ Zeugnis geben],
-  ranger_body: [Selbstverantwortung, geimeinsam unterwegs, sozialer Einsatz,\ vom Glauben\ Zeugnis geben],
+  ranger_body: [Selbstverantwortung, geimeinsam unterwegs, sozialer Einsatz, vom Glauben Zeugnis geben],
 
 
   // Blauer Infoblock
@@ -162,7 +161,7 @@
 #let woelfling-photo(path) = {
   let img-fill = tiling(
     offset: (0cm, 0cm),
-    image(path, width: 15cm)
+    image(path, width: 14.5cm)
   )
   let w = 14.5cm
   place(top + left, dx: 2.5cm, dy: -2.3cm,
@@ -252,40 +251,31 @@
 // der Position y. Linear interpoliert zwischen voller Breite und 0.
 #let triangle-width-at(bb, y) = bb.w * (1 - y / bb.h)
 
-#let ranger-text-box(title, age, body, text-height-ratio: 0.6) = {
+#let ranger-text-box(title, age, body) = {
+  let box-width = 10.5cm
+  let box-height = 5.2cm
   let pts = (
     (0cm, 0cm),
-    (10cm, 0cm),
-    (5cm, 5cm),
+    (box-width, 0cm),
+    (box-width/2, box-height),
   )
-  let bb = bbox(pts)
+  place(top + left, dx: 12.9cm, dy: 4mm,
+    box(width: box-width)[
+    #set par(spacing: 0.2em)
+    #set  align(center)
+    #headline(title)
+    #v(2.0mm)
+    #subhead(age)
+    #let padding = -0.01
+    #let heigth = 0.8
+    #polyblock(
+      points: ((padding,0), (1-padding,0), ((1-2*padding)/2, heigth) ),
+      stroke: none,
+      justify: false,
+      body
+    )
 
-  // Der Text darf nur bis zu dieser Höhe (von der Basis aus) reichen.
-  // An dieser unteren Grenze ist das Dreieck am schmalsten - genau
-  // diese Breite verwenden wir, damit der Text nie über die Kanten
-  // hinausragt.
-  let text-h = bb.h * text-height-ratio
-  let text-w = triangle-width-at(bb, text-h)
-
-  place(top + left, dx: 12.6cm, dy: 5mm,
-    box[
-      #polygon(
-        stroke: c_navy,
-        ..pts,
-      )
-      #place(top + left, dx: bb.x + (bb.w - text-w) / 2, dy: bb.y)[
-        #block(width: text-w, height: text-h)[
-          #align(center + top)[
-            #set par(spacing: 0.2em)
-            #headline(title)
-            #v(4.6mm)
-            #subhead(age)
-            #v(2.1mm)
-            #bodytext(body)
-          ]
-        ]
-      ]
-    ]
+  ]
   )
 }
 
@@ -301,8 +291,6 @@
 // =============================================================================
 
 // Photos
-// #place(image(transp2, width: 297mm))
-
 #woelfling-photo(pictures.woelflinge)
 
 #pfadi-photo(pictures.pfadi)
@@ -337,9 +325,11 @@
       #headline("GRUPPENSTUNDEN", color: c_text, size: 19pt)
     ]
     #move(dx: 2em)[
+      #set par(spacing: 0.8em)
       #box(height: 1.1em, baseline: 10%, image(assets.clock)) #t.group_time_1
-      // #bodytext(t.group_time_2, size: 14pt)
-      #v(0.5em)
+      #if metadata.twoWEEKS [
+      #bodytext((h(3em)+t.group_time_2), size: 14pt)
+      ] else [#v(0.5em)]
       #box(height: 1.1em, baseline: 10%, image(assets.map)) #t.address \
       #h(1.4em)#t.plz
     ]
@@ -364,7 +354,7 @@
 // Großes Außenfoto über Rückseite + Titelseite
 #fold-lines()
 
-#background-photo(assets.outside_photo, 160%, -4cm, 0cm)
+#background-photo(pictures.outside_photo, 160%, -4cm, 0cm)
 #set align(center)
 #columns(3, gutter: 0mm)[
   #v(17mm)

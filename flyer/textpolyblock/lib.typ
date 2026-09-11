@@ -342,7 +342,12 @@
       #for line in final.lines {
         if line.text != "" {
           let slot = line.x-end - line.x-start
-          place(top + left, dx: line.x-start, dy: line.y, 
+          let x = if justify == true {
+            line.x-start
+          } else {
+            line.x-start + (slot - line.width) / 2
+          }
+          place(top + left, dx: x, dy: line.y, 
             block(width: slot, [
             #text(size: fs, line.text)
             #if justify {
