@@ -90,6 +90,31 @@ def index_page():
             "⏰",
             "Gruppenstunde",
             fld("Treffzeit", "grouptime", PLACEHOLDERS["grouptime"]),
+            Div(
+                Label(
+                    Input(type="checkbox", name="two_weeks", id="two_weeks"),
+                    Div(
+                        Strong("alle zwei Wochen"),
+                        cls="toggle-text",
+                    ),
+                ),
+                cls="toggle-row",
+            ),
+        ),
+        card(
+            " ",
+            "Wichtel",
+            Div(
+                Label(
+                    Input(type="checkbox", name="wichtel", id="wichtel"),
+                    Div(
+                        Strong("Wichtel-Stufe anzeigen"),
+                        Small("Zeigt den Wichtel-Bereich (ab 4 Jahren) im Flyer an"),
+                        cls="toggle-text",
+                    ),
+                ),
+                cls="toggle-row",
+            ),
         ),
         card(
             "👤",
@@ -112,21 +137,6 @@ def index_page():
             ),
             fld("E-Mail", "mail", PLACEHOLDERS["mail"], type="email"),
             fld("Instagram (optional)", "instagram", "z.B. @kpe_muenchen", type="text", required=False),
-        ),
-        card(
-            "⚙️",
-            "Optionen",
-            Div(
-                Label(
-                    Input(type="checkbox", name="wichtel", id="wichtel"),
-                    Div(
-                        Strong("Wichtel-Stufe anzeigen"),
-                        Small("Zeigt den Wichtel-Bereich (ab 4 Jahren) im Flyer an"),
-                        cls="toggle-text",
-                    ),
-                ),
-                cls="toggle-row",
-            ),
         ),
         Div(
             Button("📄  PDF generieren", type="submit", id="submitBtn"),

@@ -15,6 +15,7 @@ def render_pdf(
     mail: str,
     phone: str,
     wichtel: bool,
+    two_weeks: bool,
     stammesmeisterin: bool,
     instagram: str = "",
 ) -> bytes:
@@ -33,6 +34,7 @@ def render_pdf(
         f'#let PHONE = "{esc(phone)}"\n'
         f'#let INSTAGRAM = "{esc(instagram.strip())}"\n'
         f'#let WICHTEL = {"true" if wichtel else "false"}\n'
+        f'#let twoWEEKS = {"true" if two_weeks else "false"}\n'
         f'#let STAMMESMEISTERIN = {"true" if stammesmeisterin else "false"}\n'
     )
 

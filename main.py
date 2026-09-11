@@ -25,7 +25,7 @@ async def post(request: Request):
         pdf = render_pdf(
             d.get("stamm", ""), d.get("plz", ""), d.get("address", ""),
             d.get("grouptime", ""), d.get("sfm", ""), d.get("mail", ""),
-            d.get("phone", ""), "wichtel" in d,
+            d.get("phone", ""), "wichtel" in d, "two_weeks" in d,
             d.get("geschlecht", "weiblich") == "weiblich",
             d.get("instagram", ""),
         )
