@@ -48,7 +48,7 @@ kpe-flyer/
 │   ├── main.py        # FastHTML-App (Routen, UI)
 │   └── render.py      # Typst-Rendering-Logik
 ├── flyer/
-│   ├── flyper.typ     # Typst-Template
+│   ├── flyer.typ     # Typst-Template
 │   ├── metadata.typ   # Default-Werte (werden zur Laufzeit überschrieben)
 │   ├── fonts/         # League Spartan
 │   └── pictures/      # Bilder & Icons

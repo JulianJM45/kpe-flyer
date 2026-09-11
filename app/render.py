@@ -49,7 +49,7 @@ def render_pdf(
                 "compile",
                 "--font-path",
                 str(flyer_tmp / "fonts"),
-                "flyper.typ",
+                "flyer.typ",
                 str(out_pdf),
             ],
             cwd=str(flyer_tmp),
