@@ -135,11 +135,15 @@ async def post(request: Request):
         return error_page(str(exc))
 
     name = "".join(c if c.isalnum() else "-" for c in d.get("stamm", "")).strip("-") or "stamm"
+    # Nicht-ASCII-Zeichen (z.B. Umlaute) aus dem Dateiname entfernen, damit der
+    # Content-Disposition-Header niemals nicht-utf-8 Bytes enthält.
+    safe_name = "".join(c for c in name if c.isascii()) or "stamm"
     return Response(
         pdf,
         media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename="kpe-flyer-{name}.pdf"'},
+        headers={"Content-Disposition": f'attachment; filename="kpe-flyer-{safe_name}.pdf"'},
     )
 
 
-serve()
+if __name__ == "__main__":
+    serve()

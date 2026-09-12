@@ -128,7 +128,8 @@ function applyTransform(slot) {
 
 // Overlay-Chip je Slot über dem jeweiligen Foto auf Seite 1 bauen.
 // Der Chip bleibt immer an Ort und Stelle; nur der Inhalt ändert sich:
-// ohne eigenes Bild „📷 Eigenes Foto", sonst zwei Zoom-Knäufe (+/-).
+// ohne eigenes Bild „📷 Eigenes Foto", sonst ein D-Pad: Pfeilspitzen zum
+// Verschieben oben/unten links/rechts und Zoom (+/-) zentral im Chip.
 function buildOverlays() {
     var wrap = document.querySelector('.page-wrap[data-page="1"]');
     if (!wrap) return;
@@ -149,19 +150,37 @@ function buildOverlays() {
         overlay.style.width = box.w + "%";
         overlay.style.height = box.h + "%";
 
-        var chip = document.createElement("button");
-        chip.type = "button";
+        var chip = document.createElement("div");
         chip.className = "photo-chip";
         chip.setAttribute("data-slot", slot);
+        chip.setAttribute("role", "button");
 
         if (SLOT_STATE[slot].uploaded) {
-            // Statt „📷 Eigenes Foto" nur noch Zoom-Knäufe (+/-) im Chip.
-            // var up = document.createElement("button");
-            // var down = document.createElement("button");
-            // var left = document.createElement("button");
-            // var right = document.createElement("button");
+            // Das Overlay wird zu einem D-Pad: Pfeilspitzen rund um den Chip
+            // (oben/unten links/rechts), Zoom (+/-) zentral im Chip. Der Chip
+            // samt Pfeilspitzen sitzt am selben Ort wie früher „📷 Eigenes Foto".
+            overlay.className = "photo-overlay photo-controls";
+
+            var moveStep = 2; // mm, pro Klick
+            function makeMoveBtn(dir) {
+                var b = document.createElement("button");
+                b.type = "button";
+                b.className = "photo-move-btn photo-" + dir;
+                b.setAttribute("data-dir", dir);
+                b.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    var s = st(slot);
+                    if (dir === "up") s.y += moveStep;
+                    else if (dir === "down") s.y -= moveStep;
+                    else if (dir === "left") s.x -= moveStep;
+                    else if (dir === "right") s.x += moveStep;
+                    applyTransform(slot);
+                });
+                return b;
+            }
+
+            // Zoom-Knäufe (+/-) im Chip.
             var minus = document.createElement("button");
-            var plus = document.createElement("button");
             minus.type = "button";
             minus.className = "photo-zoom-btn photo-minus";
             minus.textContent = "-";
@@ -173,6 +192,7 @@ function buildOverlays() {
                 if (b.z < 0.5) b.z = 0.5;
                 applyTransform(slot);
             });
+            var plus = document.createElement("button");
             plus.type = "button";
             plus.className = "photo-zoom-btn photo-plus";
             plus.textContent = "+";
@@ -186,7 +206,15 @@ function buildOverlays() {
             });
             chip.appendChild(minus);
             chip.appendChild(plus);
+            chip.appendChild(makeMoveBtn("up"));
+            chip.appendChild(makeMoveBtn("left"));
+            chip.appendChild(makeMoveBtn("right"));
+            chip.appendChild(makeMoveBtn("down"));
+            chip.addEventListener("click", function (e) {
+                e.stopPropagation(); // nicht als Upload-Auslöser missbrauchen
+            });
         } else {
+            chip.type = "button";
             chip.textContent = "\uD83D\uDCF7 Eigenes Foto";
             chip.addEventListener("click", function (e) {
                 e.stopPropagation();
