@@ -403,8 +403,8 @@ input:required:valid {
 
 /* Zoom-Knäufe (+/-) im Zentrum des Chips; Pfeilspitzen herum. */
 .photo-zoom-btn {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     padding: 0;
     line-height: 1;
     border: 2px solid rgba(255, 255, 255, 0.9);
@@ -424,9 +424,10 @@ input:required:valid {
     transform: scale(0.92);
 }
 
-/* Pfeilspitzen sitzen innen am Chip (D-Pad): je eine Spitze oben/unten und
-   links/rechts am Rand, nach innen (zum Zentrum) zeigend. Der Chip sitzt dort,
-   wo früher „📷 Eigenes Foto" stand, bleibt also an Ort und Stelle. */
+/* Pfeilspitzen sitzen außen am Chip (D-Pad): je eine Spitze direkt an der
+   jeweiligen Kante, nach innen zum Chip zeigend. Oben/unten links/rechts,
+   außerhalb des Chips. Der Chip samt Pfeilspitzen sitzt dort, wo früher „📷
+   Eigenes Foto" stand, bleibt also an Ort und Stelle. */
 .photo-move-btn {
     position: absolute;
     width: 26px;
@@ -445,27 +446,28 @@ input:required:valid {
 .photo-move-btn:active {
     opacity: 0.6;
 }
-/* 4px Abstand zum Chip-Rand, in der Mitte der jeweiligen Seite zentriert. */
+/* 1px Überlappung zur Chip-Kante, damit keine Lücke zwischen Pfeil und Chip steht.
+   Nach außen zeigen: Basis liegt direkt am Chip-Rand, Spitze weist nach draußen. */
 .photo-up {
-    top: 4px;
+    top: -30px;
     left: 50%;
     transform: translateX(-50%);
     clip-path: polygon(50% 0%, 0 100%, 100% 100%);
 }
 .photo-down {
-    bottom: 4px;
+    bottom: -45px;
     left: 50%;
     transform: translateX(-50%);
     clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
 .photo-left {
-    left: 4px;
+    left: -30px;
     top: 50%;
     transform: translateY(-50%);
     clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 .photo-right {
-    right: 4px;
+    right: -30px;
     top: 50%;
     transform: translateY(-50%);
     clip-path: polygon(100% 50%, 0 0, 0 100%);
