@@ -4,36 +4,44 @@
 
 :root {
     /* KPE official colors from kpe.de */
-    --kpe-blue:         #1e3a8a;  /* Deep blue (primary) */
-    --kpe-blue-dark:    #1e40af;  /* Darker blue for hover */
-    --kpe-blue-light:   #3b82f6;  /* Lighter blue for accents */
-    --kpe-blue-pale:    #dbeafe;  /* Very light blue for backgrounds */
-    --kpe-gold:         #fbbf24;  /* Gold accent */
-    --kpe-red:          #d02825;  /* Red from lily logo */
-    
-    --kpe-bg:           #f0f4f8;  /* Light blue-grey background */
-    --kpe-white:        #ffffff;
-    --kpe-text:         #1f2937;
-    --kpe-text-muted:   #6b7280;
-    --kpe-border:       #e5e7eb;
-    
+    --kpe-blue: #1e3a8a; /* Deep blue (primary) */
+    --kpe-blue-dark: #1e40af; /* Darker blue for hover */
+    --kpe-blue-light: #3b82f6; /* Lighter blue for accents */
+    --kpe-blue-pale: #dbeafe; /* Very light blue for backgrounds */
+    --kpe-gold: #fbbf24; /* Gold accent */
+    --kpe-red: #d02825; /* Red from lily logo */
+
+    --kpe-bg: #f0f4f8; /* Light blue-grey background */
+    --kpe-white: #ffffff;
+    --kpe-text: #1f2937;
+    --kpe-text-muted: #6b7280;
+    --kpe-border: #e5e7eb;
+
     /* PicoCSS override */
-    --pico-primary:         var(--kpe-blue);
-    --pico-primary-hover:   var(--kpe-blue-dark);
-    --pico-primary-focus:   rgba(30, 58, 138, 0.2);
+    --pico-primary: var(--kpe-blue);
+    --pico-primary-hover: var(--kpe-blue-dark);
+    --pico-primary-focus: rgba(30, 58, 138, 0.2);
     --pico-primary-inverse: #ffffff;
 }
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
-body { 
+body {
     background: var(--kpe-bg);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+        Arial, sans-serif;
 }
 
 /* ── Header with KPE branding ───────────────────────────────────────────── */
 .kpe-header {
-    background: linear-gradient(135deg, var(--kpe-blue) 0%, var(--kpe-blue-dark) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--kpe-blue) 0%,
+        var(--kpe-blue-dark) 100%
+    );
     padding: 2rem 0;
     margin-bottom: 2.5rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -92,7 +100,7 @@ article {
     border: 1px solid var(--kpe-border);
     border-radius: 10px !important;
     margin-bottom: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
     transition: all 0.2s ease;
 }
 
@@ -185,7 +193,9 @@ input:required:valid {
 }
 
 @media (max-width: 640px) {
-    .field-grid { grid-template-columns: 1fr; }
+    .field-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ── Checkbox (Wichtel toggle) ──────────────────────────────────────────── */
@@ -272,7 +282,15 @@ input:required:valid {
 
 /* ── Submit button ──────────────────────────────────────────────────────── */
 .submit-section {
-    background: linear-gradient(135deg, var(--kpe-blue) 0%, var(--kpe-blue-dark) 100%);
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    background: linear-gradient(
+        135deg,
+        var(--kpe-blue) 0%,
+        var(--kpe-blue-dark) 100%
+    );
     border: none;
     border-radius: 10px;
     padding: 2rem;
@@ -282,7 +300,7 @@ input:required:valid {
 }
 
 .submit-section button {
-    padding: 1rem 3.5rem;
+    padding: 1rem 2.75rem;
     font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -306,6 +324,25 @@ input:required:valid {
     opacity: 0.7;
     cursor: not-allowed;
     transform: none;
+}
+
+/* ── Vorschau-Bereich unter dem Formular ─────────────────────────────────── */
+#previewBox {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+#previewBox img {
+    max-width: 700px;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--kpe-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(30, 58, 138, 0.15);
+    margin-bottom: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* ── Footer ─────────────────────────────────────────────────────────────── */
@@ -411,11 +448,11 @@ input:required:valid {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .kpe-title h1 {
         font-size: 1.65rem;
     }
-    
+
     .kpe-title p {
         font-size: 0.875rem;
     }
@@ -425,12 +462,12 @@ input:required:valid {
     .kpe-header {
         padding: 1.5rem 0;
     }
-    
+
     .kpe-logo-container {
         width: 60px;
         height: 60px;
     }
-    
+
     .kpe-title h1 {
         font-size: 1.4rem;
     }

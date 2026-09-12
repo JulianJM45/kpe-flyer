@@ -11,15 +11,50 @@ PLACEHOLDERS = dict(
 )
 
 _SUBMIT_JS = Script("""
-    document.getElementById('flyerForm').addEventListener('submit', function () {
-        var btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.textContent = '⏳  Wird generiert …';
-        setTimeout(function () {
-            btn.disabled = false;
-            btn.textContent = '📄  PDF generieren';
-        }, 20000);
-    });
+    function setBusy(btn, busy) {
+        if (!btn) return;
+        var orig = btn.getAttribute('data-label') || (btn.textContent = btn.textContent, btn.getAttribute('data-label'));
+        if (orig === null || orig === undefined) btn.setAttribute('data-label', btn.textContent);
+        btn.disabled = busy;
+        btn.textContent = busy ? '⏳  Wird generiert …' : btn.getAttribute('data-label');
+    }
+
+    function makeHandler(action) {
+        return function (event) {
+            event.preventDefault();
+
+            var form = document.getElementById('flyerForm');
+            var previewBox = document.getElementById('previewBox');
+            previewBox.style.display = 'none';
+            previewBox.innerHTML = '';
+
+            var btn = action === 'preview'
+                ? document.getElementById('previewBtn')
+                : document.getElementById('downloadBtn');
+            setBusy(btn, true);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/' + action);
+            xhr.send(new FormData(form));
+
+            xhr.onload = function () {
+                setBusy(btn, false);
+                if (action === 'preview') {
+                    previewBox.innerHTML = xhr.responseText;
+                    previewBox.style.display = 'block';
+                }
+                // Download-Response: Browser startet den Download automatisch.
+            };
+            xhr.onerror = function () {
+                setBusy(btn, false);
+                previewBox.innerHTML = '<p style=\"color:#d02825;\">Fehler beim Generieren. Bitte erneut versuchen.</p>';
+                previewBox.style.display = 'block';
+            };
+        };
+    }
+
+    document.getElementById('previewBtn').addEventListener('click', makeHandler('preview'));
+    document.getElementById('downloadBtn').addEventListener('click', makeHandler('download'));
 """)
 
 
@@ -64,7 +99,7 @@ def kpe_footer():
                 Div("Powered by Typst"),
                 cls="kpe-footer-content",
             ),
-            cls="container",
+            cls="kpe-footer",
         ),
         cls="kpe-footer",
     )
@@ -84,7 +119,6 @@ def index_page():
                 fld("PLZ & Ort", "plz", PLACEHOLDERS["plz"]),
                 cls="field-grid",
             ),
-            fld("Adresse", "address", PLACEHOLDERS["address"]),
         ),
         card(
             "⏰",
@@ -139,12 +173,20 @@ def index_page():
             fld("Instagram (optional)", "instagram", "z.B. @kpe_muenchen", type="text", required=False),
         ),
         Div(
-            Button("📄  PDF generieren", type="submit", id="submitBtn"),
+            Button("👁️  Vorschau", type="submit", id="previewBtn"),
+            Button("💾  Herunterladen", type="submit", id="downloadBtn"),
             cls="submit-section",
+        ),
+        Div(
+            P(
+                "Vorschau erscheint hier (PNG).",
+                style="text-align:center; color:var(--kpe-text-muted); font-size:0.9rem;",
+            ),
+            id="previewBox",
+            style="margin-bottom: 3rem; text-align: center; display: none;",
         ),
         _SUBMIT_JS,
         method="post",
-        action="/render",
         id="flyerForm",
     )
 
