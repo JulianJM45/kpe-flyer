@@ -166,10 +166,14 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "python-fasthtml" },
+    { name = "uvicorn", extra = ["standard"] },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "python-fasthtml", specifier = ">=0.14.12" }]
+requires-dist = [
+    { name = "python-fasthtml", specifier = ">=0.14.12" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.52.4" },
+]
 
 [[package]]
 name = "oauthlib"
