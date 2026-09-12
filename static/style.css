@@ -379,7 +379,7 @@ input:required:valid {
     justify-content: center;
     gap: 0.4rem;
     max-width: 60%;
-    padding: 0.35rem 0.6rem;
+    padding: 0.25rem 0.4rem;
     border: 2px dashed rgba(255, 255, 255, 0.9);
     border-radius: 6px;
     background: rgba(30, 58, 138, 0.14);
@@ -402,21 +402,21 @@ input:required:valid {
 
 /* Zoom-Knäufe (+/-) innerhalb des Chips */
 .photo-zoom-btn {
-    min-width: 26px;
-    height: 22px;
-    padding: 0 0.45rem;
+    width: 20px;
+    height: 20px;
+    padding: 0;
     line-height: 1;
     border: 2px solid rgba(255, 255, 255, 0.9);
     border-radius: 4px;
-    background: rgba(30, 58, 138, 0.85);
+    background: rgba(30, 58, 138, 0.4);
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.7rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.18s ease;
 }
 .photo-zoom-btn:hover {
-    background: rgba(30, 58, 138, 1);
+    background: rgba(30, 58, 138, 0.6);
     border-color: #fff;
 }
 .photo-zoom-btn:active {

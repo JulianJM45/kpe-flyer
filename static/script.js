@@ -159,7 +159,7 @@ function buildOverlays() {
             var minus = document.createElement("button");
             minus.type = "button";
             minus.className = "photo-zoom-btn photo-minus";
-            minus.textContent = "\u2212";
+            minus.textContent = "-";
             minus.addEventListener("click", function (e) {
                 e.stopPropagation();
                 var b = st(slot);
