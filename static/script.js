@@ -170,8 +170,8 @@ function buildOverlays() {
                 b.addEventListener("click", function (e) {
                     e.stopPropagation();
                     var s = st(slot);
-                    if (dir === "up") s.y += moveStep;
-                    else if (dir === "down") s.y -= moveStep;
+                    if (dir === "up") s.y -= moveStep;
+                    else if (dir === "down") s.y += moveStep;
                     else if (dir === "left") s.x -= moveStep;
                     else if (dir === "right") s.x += moveStep;
                     applyTransform(slot);

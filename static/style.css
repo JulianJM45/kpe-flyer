@@ -405,8 +405,13 @@ input:required:valid {
 .photo-zoom-btn {
     width: 30px;
     height: 30px;
+    min-height: 30px;
     padding: 0;
-    line-height: 1;
+    line-height: 1; /* Pico-Standard (≈1.5) ignorieren, damit Zeichen zentriert */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
     border: 2px solid rgba(255, 255, 255, 0.9);
     border-radius: 4px;
     background: rgba(30, 58, 138, 0.4);
