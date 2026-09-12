@@ -345,7 +345,85 @@ input:required:valid {
     margin-right: auto;
 }
 
-/* ── Footer ─────────────────────────────────────────────────────────────── */
+/* ── Foto-Overlays in der Vorschau (Seite 1, Innenseite) ──────────────── */
+.page-wrap {
+    position: relative;
+    display: inline-block;
+    max-width: 700px;
+    width: 100%;
+}
+
+#previewBox img[data-page="1"] {
+    max-width: 700px;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--kpe-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(30, 58, 138, 0.15);
+    margin-bottom: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.photo-overlay {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none; /* Scrollen / Ziehen nur über das Chip-Button */
+}
+
+.photo-chip {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    max-width: 60%;
+    padding: 0.35rem 0.6rem;
+    border: 2px dashed rgba(255, 255, 255, 0.9);
+    border-radius: 6px;
+    background: rgba(30, 58, 138, 0.14);
+    color: #fff;
+    font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.photo-chip:hover {
+    background: rgba(30, 58, 138, 0.32);
+    border-color: #fff;
+}
+
+.photo-chip:active {
+    cursor: grabbing;
+}
+
+/* Zoom-Knäufe (+/-) innerhalb des Chips */
+.photo-zoom-btn {
+    min-width: 26px;
+    height: 22px;
+    padding: 0 0.45rem;
+    line-height: 1;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    background: rgba(30, 58, 138, 0.85);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+.photo-zoom-btn:hover {
+    background: rgba(30, 58, 138, 1);
+    border-color: #fff;
+}
+.photo-zoom-btn:active {
+    transform: scale(0.92);
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────── */
 .kpe-footer {
     background: var(--kpe-white);
     border-top: 3px solid var(--kpe-blue);

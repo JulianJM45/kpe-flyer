@@ -25,11 +25,17 @@
   instagram: "pictures/icons/instagram.svg",
   youtube: "pictures/icons/youtube.svg",
 )
+#let picture_or(path, override) = {
+  // Gibt den Dateinamen als STRING zurück; bei leerem Override wird das
+  // Originalfoto verwendet. Damit funktioniert pictures.* direkt als Quelle.
+  if override.len() > 0 { "pictures/" + override } else { path }
+}
+
 #let pictures = (
   outside_photo: "pictures/BuWaAÖ.jpeg",
-  woelflinge: "pictures/Wölflinge.jpeg",
-  pfadi: "pictures/Pfadfinder.png",
-  raider: "pictures/Raider2.jpg",
+  woelflinge: picture_or("pictures/Wölflinge.jpeg", metadata.WOELFLINGE_PHOTO),
+  pfadi: picture_or("pictures/Pfadfinder.png", metadata.PFADI_PHOTO),
+  raider: picture_or("pictures/Raider2.jpg", metadata.RAADER_PHOTO),
 )
 
 #let t = (
@@ -158,10 +164,10 @@
 }
 
 
-#let woelfling-photo(path) = {
+#let woelfling-photo(path, wolf_x, wolf_y, wolf_z) = {
   let img-fill = tiling(
-    offset: (0cm, 0cm),
-    image(path, width: 14.5cm)
+    offset: (wolf_x, wolf_y),
+    image(path, width: 14.5cm * wolf_z)
   )
   let w = 14.5cm
   place(top + left, dx: 2.5cm, dy: -2.3cm,
@@ -175,9 +181,10 @@
   )
 }
 
-#let pfadi-photo(path) = {
+#let pfadi-photo(path, pfx, pfy, pfz) = {
   let img-fill = tiling(
-    image(path, width: 12cm)
+    offset: (pfx, pfy),
+    image(path, width: 12cm * pfz)
   )
   let w = 12cm
   let h = 8.4cm
@@ -194,12 +201,12 @@
   )
 }
 
-#let raider-photo(path) = {
+#let raider-photo(path, rax, ray, raz) = {
   let w = 13cm
   let h = 14cm
   let img-fill = tiling(
-    offset: (-6.2cm, 0.2cm),
-    image(path, height: 15.2cm)
+    offset: (rax, ray),
+    image(path, height: h * raz)
   )
   place(top + right,
     polygon(
@@ -291,11 +298,11 @@
 // =============================================================================
 
 // Photos
-#woelfling-photo(pictures.woelflinge)
+#woelfling-photo(pictures.woelflinge, metadata.WOELFLINGE_X, metadata.WOELFLINGE_Y, metadata.WOELFLINGE_ZOOM)
 
-#pfadi-photo(pictures.pfadi)
+#pfadi-photo(pictures.pfadi, metadata.PFADI_X, metadata.PFADI_Y, metadata.PFADI_ZOOM)
 
-#raider-photo(pictures.raider)
+#raider-photo(pictures.raider, metadata.RAIDER_X, metadata.RAIDER_Y, metadata.RAIDER_ZOOM)
 
 
 #fold-lines()

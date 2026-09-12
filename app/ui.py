@@ -10,52 +10,11 @@ PLACEHOLDERS = dict(
     phone="z.B. 01577774472",
 )
 
-_SUBMIT_JS = Script("""
-    function setBusy(btn, busy) {
-        if (!btn) return;
-        var orig = btn.getAttribute('data-label') || (btn.textContent = btn.textContent, btn.getAttribute('data-label'));
-        if (orig === null || orig === undefined) btn.setAttribute('data-label', btn.textContent);
-        btn.disabled = busy;
-        btn.textContent = busy ? '⏳  Wird generiert …' : btn.getAttribute('data-label');
-    }
-
-    function makeHandler(action) {
-        return function (event) {
-            event.preventDefault();
-
-            var form = document.getElementById('flyerForm');
-            var previewBox = document.getElementById('previewBox');
-            previewBox.style.display = 'none';
-            previewBox.innerHTML = '';
-
-            var btn = action === 'preview'
-                ? document.getElementById('previewBtn')
-                : document.getElementById('downloadBtn');
-            setBusy(btn, true);
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/' + action);
-            xhr.send(new FormData(form));
-
-            xhr.onload = function () {
-                setBusy(btn, false);
-                if (action === 'preview') {
-                    previewBox.innerHTML = xhr.responseText;
-                    previewBox.style.display = 'block';
-                }
-                // Download-Response: Browser startet den Download automatisch.
-            };
-            xhr.onerror = function () {
-                setBusy(btn, false);
-                previewBox.innerHTML = '<p style=\"color:#d02825;\">Fehler beim Generieren. Bitte erneut versuchen.</p>';
-                previewBox.style.display = 'block';
-            };
-        };
-    }
-
-    document.getElementById('previewBtn').addEventListener('click', makeHandler('preview'));
-    document.getElementById('downloadBtn').addEventListener('click', makeHandler('download'));
-""")
+# Externes Skript für Vorschau/Download + Live-Tausch der Photos.
+# Die Foto-Chips liegen als Overlay über den Default-Fotos auf Seite 1 und tragen
+# die Upload-/Zoom/Verschiebungs-Logik. Transform-Werte werden live an das
+# Formular übergeben, damit sie bei Vorschau UND Download eingeflochten werden.
+_SCRIPT = Script(src="/static/script.js")
 
 
 def fld(label, name, placeholder="", type="text", required=True):
@@ -172,6 +131,26 @@ def index_page():
             fld("E-Mail", "mail", PLACEHOLDERS["mail"], type="email"),
             fld("Instagram (optional)", "instagram", "z.B. @kpe_muenchen", type="text", required=False),
         ),
+        # Die Datei-Eingaben sind echte <input type="file">, nur per CSS versteckt:
+        # So lässt sich die Dateiauswahl über den Overlay-Chip in der Vorschau
+        # auslösen und das gewählte Foto wird mit dem nächsten POST gesendet.
+        Input(type="file", name="woelflingo", id="woelflingo", accept="image/*",
+              cls="photo-input-hidden"),
+        Input(type="file", name="pfadi", id="pfadi", accept="image/*",
+              cls="photo-input-hidden"),
+        Input(type="file", name="raider", id="raider", accept="image/*",
+              cls="photo-input-hidden"),
+        # Versteckte Transform-Felder je Foto-Slot; Werte werden in der Vorschau
+        # live verschoben/gezoomt und bei Vorschau UND Download mitgesendet.
+        Input(type="hidden", name="tr-woelflingo-x", id="tr-woelflingo-x", value="0"),
+        Input(type="hidden", name="tr-woelflingo-y", id="tr-woelflingo-y", value="0"),
+        Input(type="hidden", name="tr-woelflingo-z", id="tr-woelflingo-z", value="1"),
+        Input(type="hidden", name="tr-pfadi-x", id="tr-pfadi-x", value="0"),
+        Input(type="hidden", name="tr-pfadi-y", id="tr-pfadi-y", value="0"),
+        Input(type="hidden", name="tr-pfadi-z", id="tr-pfadi-z", value="1"),
+        Input(type="hidden", name="tr-raider-x", id="tr-raider-x", value="0"),
+        Input(type="hidden", name="tr-raider-y", id="tr-raider-y", value="0"),
+        Input(type="hidden", name="tr-raider-z", id="tr-raider-z", value="1"),
         Div(
             Button("👁️  Vorschau", type="submit", id="previewBtn"),
             Button("💾  Herunterladen", type="submit", id="downloadBtn"),
@@ -185,7 +164,7 @@ def index_page():
             id="previewBox",
             style="margin-bottom: 3rem; text-align: center; display: none;",
         ),
-        _SUBMIT_JS,
+        _SCRIPT,
         method="post",
         id="flyerForm",
     )
@@ -193,7 +172,7 @@ def index_page():
     return (
         Title("KPE Flyer Generator"),
         kpe_header(),
-        Main(Div(form, cls="kpe-content"), cls="container"),
+        Main(Div(form, cls="kpe-content"), cls="container",),
         kpe_footer(),
     )
 
