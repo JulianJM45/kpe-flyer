@@ -38,7 +38,7 @@ def render_pdf(
         f'#let STAMMESMEISTERIN = {"true" if stammesmeisterin else "false"}\n'
     )
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
         tmp_path = Path(tmp)
         flyer_tmp = tmp_path / "flyer"
         shutil.copytree(FLYER_DIR, flyer_tmp)
