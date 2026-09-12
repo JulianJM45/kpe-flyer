@@ -156,7 +156,12 @@ function buildOverlays() {
 
         if (SLOT_STATE[slot].uploaded) {
             // Statt „📷 Eigenes Foto" nur noch Zoom-Knäufe (+/-) im Chip.
+            // var up = document.createElement("button");
+            // var down = document.createElement("button");
+            // var left = document.createElement("button");
+            // var right = document.createElement("button");
             var minus = document.createElement("button");
+            var plus = document.createElement("button");
             minus.type = "button";
             minus.className = "photo-zoom-btn photo-minus";
             minus.textContent = "-";
@@ -168,7 +173,6 @@ function buildOverlays() {
                 if (b.z < 0.5) b.z = 0.5;
                 applyTransform(slot);
             });
-            var plus = document.createElement("button");
             plus.type = "button";
             plus.className = "photo-zoom-btn photo-plus";
             plus.textContent = "+";

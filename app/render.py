@@ -2,9 +2,71 @@ import os
 import shutil
 import subprocess
 import tempfile
+from io import BytesIO
 from pathlib import Path
 
+try:
+    from PIL import Image
+except ImportError:  # pragma: no cover - Pillow ist eine harte Abhängigkeit
+    Image = None
+
 FLYER_DIR = Path(__file__).parent.parent / "flyer"
+
+# Suffix für die kleinen JPEG-Thumbs der Vorschau (Original bleibt unangetastet).
+_THUMB_SUFFIX = "_thumb"
+# JPEG-Qualität + größte Kantenlänge für Thumbnails. Klein genug für blitzschnelle
+# Vorschau-Neu-Renderer, aber noch gut genug zur Orientierung in der Vorschau.
+_THUMB_QUALITY = 40
+_MAX_THUMB_DIM = 500
+
+
+def _thumbnail_bytes(data: bytes) -> bytes:
+    """Erzeugt aus Bilddaten eine kleine, schnelle Thumbnail-Version.
+
+    Das Bild wird auf max. _MAX_THUMB_DIM px Kantenlänge skaliert und als JPEG mit
+    reduzierter Qualität gespeichert. Kann ein Bild nicht dekodiert werden, wird die
+    Original-Ausgabe zurückgegeben, damit nichts kaputtgeht."""
+    if Image is None:  # pragma: no cover - Pillow ist Pflicht
+        return data
+    try:
+        with Image.open(BytesIO(data)) as im:
+            if im.mode != "RGB":
+                im = im.convert("RGB")
+            w, h = im.size
+            scale = min(1.0, _MAX_THUMB_DIM / max(w, h))
+            if scale < 1.0:
+                im = im.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
+            out = BytesIO()
+            im.save(out, "JPEG", quality=_THUMB_QUALITY, subsampling=2)
+            return out.getvalue()
+    except Exception:
+        # Dekodierung fehlgeschlagen -> mit Original weiterarbeiten.
+        return data
+
+
+def _resolve_overrides(
+    photo_overrides: dict[str, tuple[str, bytes]] | None, *, low_quality: bool
+) -> tuple[dict[str, str], dict[str, tuple[str, bytes]]]:
+    """Bereitet Foto-Overrides für die Ausgabe vor.
+
+    Liefert ein Tupel aus (Dateinamen für die metadata-Override-Zeilen, zu
+    schreibende Bytes). Bei `low_quality` wird je hochgeladenem Foto eine kleine
+    JPEG-Thumbail erzeugt und mit dem Suffix "_thumb" abgespeichert (schnelle
+    Vorschau); sonst bleiben Originalname und -daten erhalten. Für den Download
+    werden so immer die Bilder in voller Auflösung verwendet."""
+    names: dict[str, str] = {}
+    writes: dict[str, tuple[str, bytes]] = {}
+    for slot, (filename, data) in (photo_overrides or {}).items():
+        if low_quality:
+            stem = Path(filename).stem
+            write_name = f"{stem}{_THUMB_SUFFIX}.jpg"
+            payload = _thumbnail_bytes(data)
+        else:
+            write_name = filename
+            payload = data
+        names[slot] = write_name
+        writes[slot] = (write_name, payload)
+    return names, writes
 
 
 def _esc(s: str) -> str:
@@ -139,16 +201,20 @@ def render_pdf(
     photo_overrides: dict[str, tuple[str, bytes]] | None = None,
     photo_transforms: dict[str, tuple[float, float, float]] | None = None,
 ) -> bytes:
-    """Compile the KPE Wickelfalz flyer with typst and return raw PDF bytes."""
+    """Compile the KPE Wickelfalz flyer with typst and return raw PDF bytes.
 
+    Beim Download (PDF) werden IMMER die Bilder in voller Auflösung verwendet;
+    die Thumbnails aus der Vorschau bleiben dabei unangetastet."""
+
+    _names, writes = _resolve_overrides(photo_overrides, low_quality=False)
     with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
         tmp_path = Path(tmp)
         metadata_text = _metadata_text(
-            **metadata_extra, photo_overrides=None, photo_transforms=photo_transforms
+            **metadata_extra, photo_overrides=_names, photo_transforms=photo_transforms
         )
         files = _run_compile(
             tmp_path, "flyer.pdf", metadata_text=metadata_text,
-            photo_overrides=photo_overrides,
+            photo_overrides=writes,
         )
     return files[0]
 
@@ -160,28 +226,35 @@ def render_png(
     photo_transforms: dict[str, tuple[float, float, float]] | None = None,
     dpi: int = 150,
     pages: str | None = None,
+    low_quality: bool = True,
 ) -> list[bytes]:
     """Compile the flyer with typst and return raw PNG bytes.
 
     `pages` begrenzt den Export auf eine Seite (z.B. "1" für die Innenseite);
     ohne Wert werden beide Seiten exportiert.
-    """
 
+    Bei `low_quality=True` (Standard, Vorschau) wird jede hochgeladene Photo als
+    kleine JPEG-Thumbs verwendet, damit der Live-Render blitzschnell ist. Für den
+    Download (`render_pdf`) kommen immer die Bilder in voller Auflösung zum
+    Einsatz. Zusätzlich wird bei beiden Seiten die teure, feste Hintergrund-Photo
+    auf Seite 2 mit niedrigerem DPI gerendert, da sie als Ganzes neu geladen wird
+    und kein Live-Zoom hat."""
+
+    _names, writes = _resolve_overrides(photo_overrides, low_quality=low_quality)
     with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
         out_template = "page{p}.png"
         # Namen der hochgeladenen Photos in die metadata-Override-Zeilen schreiben,
         # damit picture_or() diese statt der Originalfotos verwendet.
-        override_names = {k: v[0] for k, v in (photo_overrides or {}).items()}
         metadata_text = _metadata_text(
             **metadata_extra,
-            photo_overrides=override_names,
+            photo_overrides=_names,
             photo_transforms=photo_transforms,
         )
         return _run_compile(
             Path(tmp),
             out_template,
             metadata_text=metadata_text,
-            photo_overrides=photo_overrides,
-            dpi=dpi,
+            photo_overrides=writes,
+            dpi=dpi if low_quality else 100,
             pages=pages,
         )
