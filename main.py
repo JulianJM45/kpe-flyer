@@ -9,6 +9,8 @@ from app.ui import error_page, index_page
 
 app, rt = fast_app(pico=True, hdrs=(Style(Path("static/style.css").read_text()),))
 
+print("🚀 FlyerMaker läuft auf http://localhost:8000", flush=True)
+
 # Mount static files directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

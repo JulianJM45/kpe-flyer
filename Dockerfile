@@ -15,23 +15,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm /tmp/typst.tar.xz
 
 # ── Stage 2: application ──────────────────────────────────────────────────
-FROM python:3.12-slim
+FROM python:3.12-slim-bookworm
 
 COPY --from=typst-dl /usr/local/bin/typst /usr/local/bin/typst
 
-RUN pip install --no-cache-dir uv
+COPY --from=ghcr.io/astral-sh/uv:0.9.2 /uv /uvx /bin/
+
+ADD . /app
 
 WORKDIR /app
 
-COPY pyproject.toml uv.lock ./
-COPY src/ ./src/
-RUN uv sync --frozen --no-dev
+RUN uv sync --locked --no-dev
 
-COPY app/     ./app/
-COPY flyer/   ./flyer/
-COPY static/  ./static/
-COPY main.py  ./
+EXPOSE 8000
 
-EXPOSE 5001
-
-CMD ["uv", "run", "python", "main.py"]
+CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
