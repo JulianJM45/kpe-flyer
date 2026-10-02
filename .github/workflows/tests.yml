@@ -1,0 +1,33 @@
+name: Run Unit Test via Pytest
+
+on:
+    push:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install uv
+              uses: astral-sh/setup-uv@v6
+
+            - name: Set up Python
+              run: uv python install 3.12
+
+            - name: Install Typst
+              run: |
+                  wget -qO /tmp/typst.tar.xz \
+                    "https://github.com/typst/typst/releases/download/v0.15.1/typst-x86_64-unknown-linux-musl.tar.xz"
+                  tar -xJf /tmp/typst.tar.xz -C /tmp
+                  sudo mv /tmp/typst-x86_64-unknown-linux-musl/typst /usr/local/bin/typst
+                  chmod +x /usr/local/bin/typst
+                  typst --version
+
+            - name: Install dependencies
+              run: uv sync --locked
+
+            - name: Run tests
+              run: uv run pytest

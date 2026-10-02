@@ -1,0 +1,39 @@
+name: Mirror to GitLab
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add GitLab remote
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          git remote add gitlab https://schuelerj:${{ secrets.GITLAB_TOKEN }}@git.commtool.org/schuelerj/flyermaker.git
+
+      - name: Push branches to GitLab
+        run: |
+          # push all branches and tags
+          git push --prune gitlab refs/heads/*:refs/heads/*
+
+      - name: Push tags to GitLab
+        run: |
+          git push --tags gitlab
