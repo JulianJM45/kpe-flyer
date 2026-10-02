@@ -77,7 +77,7 @@ def get(sid: str, page: int, ver: int):
     svg = sess.svg_page1 if page == 1 else sess.svg_page2
     if not svg:
         return Response("SVG nicht vorhanden", status_code=404)
-    return Response(svg, media_type="image/svg+xml", headers={"Cache-Control": "no-store"})
+    return Response(svg, media_type="image/png", headers={"Cache-Control": "no-store"})
 
 
 # ── Photo upload ──────────────────────────────────────────────────────────────

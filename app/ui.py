@@ -174,7 +174,6 @@ def _upload_form(sid: str, slot_name: str, label: str = "📷 Eigenes Foto"):
         hx_target="#page1-preview",
         hx_swap="outerHTML",
         hx_encoding="multipart/form-data",
-        hx_indicator="#preview-spinner",
     )
 
 
@@ -185,7 +184,6 @@ def _move_btn(sid: str, slot_name: str, direction: str, label: str, extra_cls: s
         hx_vals=f'{{"dir":"{direction}"}}',
         hx_target="#page1-preview",
         hx_swap="outerHTML",
-        hx_indicator="#preview-spinner",
         cls=f"liquid-btn arrow-btn {extra_cls}".strip(),
     )
 
@@ -246,7 +244,6 @@ def page1_preview(sid: str, sess: Session):
             alt="Innenseite Vorschau",
         ),
         _photo_overlay(sid, sess),
-        Div(id="preview-spinner", cls="preview-spinner htmx-indicator"),
         id="page1-preview",
         cls="page-wrapper",
     )
@@ -281,14 +278,6 @@ def preview_page(sid: str, sess: Session):
                     cls="page-wrapper page-wrapper--static",
                 ),
                 Script("""
-                    // Dim SVG (not blur!) while HTMX re-renders
-                    document.addEventListener('htmx:beforeRequest', function(e) {
-                        var t = e.detail.target;
-                        if (t && t.id === 'page1-preview') t.classList.add('loading');
-                    });
-                    // loading class disappears naturally via outerHTML swap
-
-                    // Download button state
                     document.addEventListener('DOMContentLoaded', function() {
                         var form = document.querySelector('.download-bar form');
                         if (form) form.addEventListener('submit', function() {

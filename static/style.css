@@ -474,12 +474,6 @@ input:required:valid   { border-color: #10b981; }
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transition: opacity 0.12s ease;
-}
-
-/* Added via JS during HTMX request */
-#page1-preview.loading .page-svg {
-    opacity: 0.55;
 }
 
 /* ── Photo overlay ───────────────────────────────────────────────────────── */
@@ -574,49 +568,6 @@ input:required:valid   { border-color: #10b981; }
     display: flex;
     align-items: center;
     gap: 3px;
-}
-
-/* ── Loading badge (HTMX indicator – no blur, no full overlay) ──────────── */
-.preview-spinner {
-    position: absolute;
-    top: 0.6rem;
-    right: 0.6rem;
-    display: none;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.3rem 0.75rem;
-    background: rgba(30, 58, 138, 0.82);
-    color: #fff;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    border-radius: 999px;
-    pointer-events: none;
-    z-index: 20;
-    /* NO backdrop-filter – avoids full-page blur */
-}
-
-.preview-spinner::before {
-    content: "";
-    width: 0.7rem;
-    height: 0.7rem;
-    border: 2px solid rgba(255,255,255,0.35);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-}
-
-.preview-spinner::after {
-    content: "Wird gerendert …";
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-.htmx-request .preview-spinner,
-.preview-spinner.htmx-request {
-    display: flex;
 }
 
 /* HTMX default indicator behaviour */

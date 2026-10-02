@@ -71,11 +71,13 @@ def _run_typst(sess: Session, fmt: str) -> list[bytes] | bytes:
 
         if fmt == "pdf":
             out_pattern = str(tmp_path / "out.pdf")
+            extra_args: list[str] = []
         else:
-            out_pattern = str(tmp_path / "out-{p}.svg")
+            out_pattern = str(tmp_path / "out-{p}.png")
+            extra_args = ["--ppi", "144"]
 
         result = subprocess.run(
-            ["typst", "compile", "--font-path", str(flyer_tmp / "fonts"), "flyer.typ", out_pattern],
+            ["typst", "compile", "--font-path", str(flyer_tmp / "fonts"), *extra_args, "flyer.typ", out_pattern],
             cwd=str(flyer_tmp),
             capture_output=True,
             text=True,
@@ -89,7 +91,7 @@ def _run_typst(sess: Session, fmt: str) -> list[bytes] | bytes:
 
         pages: list[bytes] = []
         for i in range(1, 20):
-            f = tmp_path / f"out-{i}.svg"
+            f = tmp_path / f"out-{i}.png"
             if not f.exists():
                 break
             pages.append(f.read_bytes())
