@@ -29,11 +29,7 @@ jobs:
         run: |
           git remote add gitlab https://schuelerj:${{ secrets.GITLAB_TOKEN }}@git.commtool.org/schuelerj/flyermaker.git
 
-      - name: Push branches to GitLab
+      - name: Mirror to GitLab
         run: |
-          # push all branches and tags
-          git push --prune gitlab refs/heads/*:refs/heads/*
-
-      - name: Push tags to GitLab
-        run: |
-          git push --tags gitlab
+            git push --mirror gitlab
+          
