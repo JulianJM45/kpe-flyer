@@ -12,7 +12,7 @@ def _html(components) -> str:
 def test_index_page_contains_form():
     html = _html(index_page())
     assert '<form' in html.lower()
-    assert 'action="/render"' in html
+    assert 'action="/preview"' in html
     assert 'method="post"' in html
 
 

@@ -11,11 +11,12 @@ FLYER_DIR = Path(__file__).parent.parent / "flyer"
 
 def _compile(metadata_content: str, timeout: int = 30) -> bytes:
     """Schreibt metadata.typ, ruft typst compile auf und gibt PDF-Bytes zurück."""
-    with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
+    with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
         flyer_tmp = tmp_path / "flyer"
         shutil.copytree(FLYER_DIR, flyer_tmp)
         (flyer_tmp / "metadata.typ").write_text(metadata_content, encoding="utf-8")
+        (flyer_tmp / "custom").mkdir(exist_ok=True)
 
         out_pdf = tmp_path / "flyer.pdf"
         result = subprocess.run(
@@ -50,6 +51,18 @@ DEFAULT_META = """\
 #let WICHTEL = false
 #let twoWEEKS = false
 #let STAMMESMEISTERIN = false
+#let WOLF_PHOTO = "pictures/Wölflinge.jpeg"
+#let WOLF_X = 0mm
+#let WOLF_Y = 0mm
+#let WOLF_Z = 1
+#let PFADI_PHOTO = "pictures/Pfadfinder.png"
+#let PFX = 0mm
+#let PFY = 0mm
+#let PFZ = 1
+#let RAIDER_PHOTO = "pictures/Raider2.jpg"
+#let RAX = -62mm
+#let RAY = 2mm
+#let RAZ = 1.1
 """
 
 
