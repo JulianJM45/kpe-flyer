@@ -158,10 +158,11 @@
 }
 
 
+#let woelf_zoom = 1.0
 #let woelfling-photo(path) = {
   let img-fill = tiling(
     offset: (0cm, 0cm),
-    image(path, width: 14.5cm)
+    image(path, width: 14.5cm * woelf_zoom)
   )
   let w = 14.5cm
   place(top + left, dx: 2.5cm, dy: -2.3cm,
