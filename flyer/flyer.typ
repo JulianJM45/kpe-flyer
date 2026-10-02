@@ -146,13 +146,12 @@
 
 // ===== FOTOS ===============================================================
 
-#let woelf_zoom = 1.0
-#let woelfling-photo(path) = {
-  let img-fill = tiling(
-    offset: (0cm, 0cm),
-    image(path, width: 14.5cm * woelf_zoom)
-  )
+#let woelfling-photo(path, wolf_x:0mm, wolf_y:0mm, wolf_z:1.0) = {
   let w = 14.5cm
+  let img-fill = tiling(
+    offset: (wolf_x, wolf_y),
+    image(path, width: w * wolf_z)
+  )
   place(top + left, dx: 2.5cm, dy: -2.3cm,
     polygon(
       fill: img-fill,
@@ -164,9 +163,11 @@
   )
 }
 
-#let pfadi-photo(path) = {
+#let pfadi-photo(path, pfx:0mm, pfy:0mm, pfz:1.0) = {
+  let w = 12cm
   let img-fill = tiling(
-    image(path, width: 12cm)
+    offset: (pfx, pfy),
+    image(path, width: w * pfz)
   )
   let w = 12cm
   let h = 8.4cm
@@ -183,12 +184,12 @@
   )
 }
 
-#let raider-photo(path) = {
+#let raider-photo(path, rax:-62mm, ray:2mm, raz:1.1) = {
   let w = 13cm
   let h = 14cm
   let img-fill = tiling(
-    offset: (-6.2cm, 0.2cm),
-    image(path, height: 15.2cm)
+    offset: (rax, ray),
+    image(path, height: h * raz)
   )
   place(top + right,
     polygon(
