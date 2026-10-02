@@ -3,21 +3,19 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-    /* KPE official colors from kpe.de */
-    --kpe-blue:         #1e3a8a;  /* Deep blue (primary) */
-    --kpe-blue-dark:    #1e40af;  /* Darker blue for hover */
-    --kpe-blue-light:   #3b82f6;  /* Lighter blue for accents */
-    --kpe-blue-pale:    #dbeafe;  /* Very light blue for backgrounds */
-    --kpe-gold:         #fbbf24;  /* Gold accent */
-    --kpe-red:          #d02825;  /* Red from lily logo */
-    
-    --kpe-bg:           #f0f4f8;  /* Light blue-grey background */
+    --kpe-blue:         #1e3a8a;
+    --kpe-blue-dark:    #1e40af;
+    --kpe-blue-light:   #3b82f6;
+    --kpe-blue-pale:    #dbeafe;
+    --kpe-gold:         #fbbf24;
+    --kpe-red:          #d02825;
+
+    --kpe-bg:           #f0f4f8;
     --kpe-white:        #ffffff;
     --kpe-text:         #1f2937;
     --kpe-text-muted:   #6b7280;
     --kpe-border:       #e5e7eb;
-    
-    /* PicoCSS override */
+
     --pico-primary:         var(--kpe-blue);
     --pico-primary-hover:   var(--kpe-blue-dark);
     --pico-primary-focus:   rgba(30, 58, 138, 0.2);
@@ -26,12 +24,12 @@
 
 * { box-sizing: border-box; }
 
-body { 
+body {
     background: var(--kpe-bg);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* ── Header with KPE branding ───────────────────────────────────────────── */
+/* ── Header ─────────────────────────────────────────────────────────────── */
 .kpe-header {
     background: linear-gradient(135deg, var(--kpe-blue) 0%, var(--kpe-blue-dark) 100%);
     padding: 2rem 0;
@@ -169,14 +167,8 @@ input::placeholder {
     font-style: italic;
 }
 
-/* Required field validation */
-input:required:invalid {
-    border-color: var(--kpe-border);
-}
-
-input:required:valid {
-    border-color: #10b981;
-}
+input:required:invalid { border-color: var(--kpe-border); }
+input:required:valid   { border-color: #10b981; }
 
 .field-grid {
     display: grid;
@@ -188,7 +180,7 @@ input:required:valid {
     .field-grid { grid-template-columns: 1fr; }
 }
 
-/* ── Checkbox (Wichtel toggle) ──────────────────────────────────────────── */
+/* ── Checkbox ───────────────────────────────────────────────────────────── */
 .toggle-row {
     background: var(--kpe-blue-pale);
     border: 1.5px solid #bfdbfe;
@@ -220,9 +212,7 @@ input:required:valid {
     cursor: pointer;
 }
 
-.toggle-text {
-    flex: 1;
-}
+.toggle-text { flex: 1; }
 
 .toggle-text strong {
     display: block;
@@ -237,7 +227,7 @@ input:required:valid {
     line-height: 1.4;
 }
 
-/* ── Radio button group ────────────────────────────────────── */
+/* ── Radio group ────────────────────────────────────────────────────────── */
 .radio-group {
     display: flex;
     gap: 1.5rem;
@@ -259,18 +249,13 @@ input:required:valid {
     margin: 0;
 }
 
-.radio-group label:hover {
-    color: var(--kpe-blue);
-}
+.radio-group label:hover { color: var(--kpe-blue); }
 
 @media (max-width: 480px) {
-    .radio-group {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
+    .radio-group { flex-direction: column; gap: 0.75rem; }
 }
 
-/* ── Submit button ──────────────────────────────────────────────────────── */
+/* ── Submit / Vorschau button ────────────────────────────────────────────── */
 .submit-section {
     background: linear-gradient(135deg, var(--kpe-blue) 0%, var(--kpe-blue-dark) 100%);
     border: none;
@@ -407,31 +392,276 @@ input:required:valid {
 
 /* ── Responsive tweaks ──────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-    .kpe-header .container {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .kpe-title h1 {
-        font-size: 1.65rem;
-    }
-    
-    .kpe-title p {
-        font-size: 0.875rem;
-    }
+    .kpe-header .container { flex-direction: column; text-align: center; }
+    .kpe-title h1 { font-size: 1.65rem; }
+    .kpe-title p  { font-size: 0.875rem; }
 }
 
 @media (max-width: 480px) {
-    .kpe-header {
-        padding: 1.5rem 0;
-    }
-    
-    .kpe-logo-container {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .kpe-title h1 {
-        font-size: 1.4rem;
-    }
+    .kpe-header { padding: 1.5rem 0; }
+    .kpe-logo-container { width: 60px; height: 60px; }
+    .kpe-title h1 { font-size: 1.4rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREVIEW PAGE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.preview-content {
+    padding-bottom: 6rem;
+}
+
+.preview-topbar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-top: 0.5rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--kpe-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border: 1.5px solid var(--kpe-blue-light);
+    border-radius: 8px;
+    background: var(--kpe-white);
+    transition: all 0.2s;
+}
+
+.back-link:hover {
+    background: var(--kpe-blue-pale);
+    transform: translateX(-2px);
+}
+
+.page-label {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--kpe-blue);
+    margin: 1.5rem 0 0.5rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--kpe-blue-pale);
+}
+
+.preview-hint {
+    font-size: 0.85rem;
+    color: var(--kpe-text-muted);
+    margin-bottom: 0.75rem;
+}
+
+/* ── Page wrapper (SVG + overlay) ────────────────────────────────────────── */
+.page-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+    background: #fff;
+    margin-bottom: 2rem;
+    /* force landscape aspect ratio 297:210 */
+    aspect-ratio: 297 / 210;
+}
+
+.page-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.12s ease;
+}
+
+/* Added via JS during HTMX request */
+#page1-preview.loading .page-svg {
+    opacity: 0.55;
+}
+
+/* ── Photo overlay ───────────────────────────────────────────────────────── */
+.photo-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.photo-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    pointer-events: all;
+}
+
+/* ── Liquid glass buttons ────────────────────────────────────────────────── */
+.liquid-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(14px) saturate(1.8);
+    -webkit-backdrop-filter: blur(14px) saturate(1.8);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.20),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 0;
+    outline: none;
+    text-decoration: none;
+}
+
+.liquid-btn:hover {
+    background: rgba(255, 255, 255, 0.32);
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    transform: scale(1.08);
+}
+
+.liquid-btn:active {
+    transform: scale(0.96);
+    background: rgba(255, 255, 255, 0.40);
+}
+
+/* Sizes */
+.arrow-btn {
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1.1rem;
+}
+
+.zoom-btn {
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1.3rem;
+}
+
+.upload-label {
+    width: auto;
+    border-radius: 999px;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+/* ── Move / zoom control grid ────────────────────────────────────────────── */
+.move-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.move-row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/* ── Loading badge (HTMX indicator – no blur, no full overlay) ──────────── */
+.preview-spinner {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.75rem;
+    background: rgba(30, 58, 138, 0.82);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 20;
+    /* NO backdrop-filter – avoids full-page blur */
+}
+
+.preview-spinner::before {
+    content: "";
+    width: 0.7rem;
+    height: 0.7rem;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.preview-spinner::after {
+    content: "Wird gerendert …";
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.htmx-request .preview-spinner,
+.preview-spinner.htmx-request {
+    display: flex;
+}
+
+/* HTMX default indicator behaviour */
+.htmx-indicator { display: none !important; }
+.htmx-request .htmx-indicator,
+.htmx-indicator.htmx-request { display: flex !important; }
+
+/* ── Download bar ────────────────────────────────────────────────────────── */
+.download-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--kpe-border);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.10);
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+}
+
+.download-btn {
+    padding: 0.85rem 3rem;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--kpe-blue) 0%, var(--kpe-blue-dark) 100%);
+    color: var(--kpe-white);
+    border: none;
+    box-shadow: 0 4px 14px rgba(30, 58, 138, 0.35);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.download-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(30, 58, 138, 0.45);
+}
+
+.download-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
 }

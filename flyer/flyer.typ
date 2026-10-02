@@ -241,9 +241,9 @@
 // =============================================================================
 
 // Photos
-#woelfling-photo(pictures.woelflinge)
-#pfadi-photo(pictures.pfadi)
-#raider-photo(pictures.raider)
+#woelfling-photo(metadata.WOLF_PHOTO, wolf_x: metadata.WOLF_X, wolf_y: metadata.WOLF_Y, wolf_z: metadata.WOLF_Z)
+#pfadi-photo(metadata.PFADI_PHOTO, pfx: metadata.PFX, pfy: metadata.PFY, pfz: metadata.PFZ)
+#raider-photo(metadata.RAIDER_PHOTO, rax: metadata.RAX, ray: metadata.RAY, raz: metadata.RAZ)
 
 #fold-lines()
 
