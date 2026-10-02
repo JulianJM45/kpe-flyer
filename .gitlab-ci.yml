@@ -3,7 +3,7 @@ stages:
   - deploy
 
 variables:
-  IMAGE: "registry.git.commtool.org:443/schuelerj/kpe-flyer:latest"
+  IMAGE: "registry.git.commtool.org:443/schuelerj/flyermaker:latest"
   DOCKER_BUILDKIT: 1
 
 # Optional: CI runner tags
