@@ -45,10 +45,10 @@ def get_session(sid: str) -> Session | None:
 
 def apply_move(slot: PhotoSlot, direction: str) -> None:
     match direction:
-        case "up":       slot.y -= _STEP_XY
-        case "down":     slot.y += _STEP_XY
-        case "left":     slot.x -= _STEP_XY
-        case "right":    slot.x += _STEP_XY
+        case "up":       slot.y += _STEP_XY
+        case "down":     slot.y -= _STEP_XY
+        case "left":     slot.x += _STEP_XY
+        case "right":    slot.x -= _STEP_XY
         case "zoom_in":  slot.z = round(slot.z + _STEP_Z, 4)
         case "zoom_out": slot.z = max(0.1, round(slot.z - _STEP_Z, 4))
 

@@ -165,12 +165,11 @@
 
 #let pfadi-photo(path, pfx:0mm, pfy:0mm, pfz:1.0) = {
   let w = 12cm
+  let h = 8.4cm
   let img-fill = tiling(
     offset: (pfx, pfy),
     image(path, width: w * pfz)
   )
-  let w = 12cm
-  let h = 8.4cm
   place(bottom + left, dx: 9.9cm, dy: 0cm,
     polygon(
       fill: img-fill,
