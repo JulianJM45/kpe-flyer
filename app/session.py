@@ -24,6 +24,8 @@ class Session:
     svg_page1: bytes | None = None
     svg_page2: bytes | None = None
     svg_version: int = 0
+    # base images for PIL compositing (page 1 with that slot blanked)
+    page1_bases: dict[str, bytes] = field(default_factory=dict)
     created_at: float = field(default_factory=time.time)
 
 
