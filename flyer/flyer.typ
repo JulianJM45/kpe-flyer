@@ -41,11 +41,11 @@
 
   woelflinge_title: "WÖLFLINGE",
   woelflinge_age: "8-11 Jahre",
-  woelflinge_body: [So wie Zelten, Singen, Wandern und Kochen\ zu unserem Pfadfindersein dazugehören, so auch das\ gemeinsame Gebet und Sprechen über den Glauben.],
+  woelflinge_body: [So wie Zelten, Singen, Wandern und Kochen\ zu unserem Pfadfindersein dazugehören, so\ auch das gemeinsame Gebet und Sprechen über\ den Glauben.],
 
   pfadi_title: "PFADFINDER",
   pfadi_age: "12-16 Jahre",
-  pfadi_body: [Als Pfadfinder bringt sich jeder ein - mit seinen\ Ideen, Fähigkeiten und Engagement. Gemeinsam\ bestehen wir Abenteuer und Herausforderungen,\ errichten Lagerbauten, gewinnen Olympiaden und\ helfen tatkräftig bei Hilfseinsätzen.],
+  pfadi_body: [Als Pfadfinder bringt sich jeder ein -\ mit seinen Ideen, Fähigkeiten und\ Engagement. Gemeinsam bestehen wir\ Abenteuer und Herausforderungen, errichten Lagerbauten, gewinnen Olympiaden und helfen tatkräftig bei Hilfseinsätzen.],
 
   ranger_title: "RANGER & ROVER",
   ranger_age: "ab 17 Jahren",
@@ -123,7 +123,7 @@
   body
 }
 
-#let bodytext(body, size: 10pt, color: c_text, leading: 0.5em) = {
+#let bodytext(body, size: 12pt, color: c_text, leading: 0.5em) = {
   set text(size: size, weight: "regular", fill: color)
   set par(leading: leading)
   body
@@ -144,6 +144,29 @@
   ]
 }
 
+// Ranger-Dreieck (nach unten spitz zulaufend), Text via polyblock.
+#let ranger-text-box(title, age, body) = {
+  let box-width = 10.5cm
+  place(top + left, dx: 12.9cm, dy: 4mm,
+    box(width: box-width)[
+      #set par(spacing: 0.2em)
+      #set align(center)
+      #headline(title)
+      #v(2.0mm)
+      #subhead(age)
+      // Etwas ausladende Eckpunkte, damit die Flanken ganz an den Boxrand reichen.
+      #let pad = 0.01
+      #let tip = 0.8
+      #set text(size: 10pt, weight: "regular", fill: c_text)
+      #polyblock(
+        points: ((-pad, 0), (1 + pad, 0), ((1 + 2 * pad) / 2, tip)),
+        stroke: none,
+        justify: false,
+        body
+      )
+    ]
+  )
+}
 // ===== FOTOS ===============================================================
 
 #let woelfling-photo(path, wolf_x:0mm, wolf_y:0mm, wolf_z:1.0) = {
@@ -213,28 +236,6 @@
   )
 }
 
-// Ranger-Dreieck (nach unten spitz zulaufend), Text via polyblock.
-#let ranger-text-box(title, age, body) = {
-  let box-width = 10.5cm
-  place(top + left, dx: 12.9cm, dy: 4mm,
-    box(width: box-width)[
-      #set par(spacing: 0.2em)
-      #set align(center)
-      #headline(title)
-      #v(2.0mm)
-      #subhead(age)
-      // Etwas ausladende Eckpunkte, damit die Flanken ganz an den Boxrand reichen.
-      #let pad = 0.01
-      #let tip = 0.8
-      #polyblock(
-        points: ((-pad, 0), (1 + pad, 0), ((1 + 2 * pad) / 2, tip)),
-        stroke: none,
-        justify: false,
-        body
-      )
-    ]
-  )
-}
 
 // =============================================================================
 // SEITE 1 – INNENSEITE
@@ -260,7 +261,7 @@
     ]
     #stufen-info(t.woelflinge_title, t.woelflinge_age, t.woelflinge_body, alignment: left)
   ]
-  #v(4mm)
+  #v(0mm)
   #box(width: 92%, height: 7cm)[
     #place()[
       #polygon(fill: c_navy,
@@ -288,8 +289,9 @@
   #align(center)[#lily(size: 25mm)]
 
   #colbreak()
-  #v(160mm)
-  #move(dx: 20mm)[#stufen-info(t.pfadi_title, t.pfadi_age, t.pfadi_body, alignment: right)]
+  #v(154mm)
+  #set align(right)
+  #move(dx: -5mm)[#stufen-info(t.pfadi_title, t.pfadi_age, t.pfadi_body, alignment: right)]
 ]
 #pagebreak()
 
