@@ -18,7 +18,7 @@ DEFAULTS = {
 
 
 def _render(**overrides) -> bytes:
-    kw = {**DEFAULTS, **overrides}
+    kw: dict = {**DEFAULTS, **overrides}
     return render_pdf(**kw)
 
 

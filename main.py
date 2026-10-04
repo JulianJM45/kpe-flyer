@@ -3,6 +3,7 @@ import mimetypes
 from pathlib import Path
 
 from fasthtml.common import *
+from starlette.datastructures import UploadFile
 from starlette.responses import Response
 from starlette.staticfiles import StaticFiles
 
@@ -109,7 +110,7 @@ async def upload_photo(request: Request, sid: str, slot_name: str):
 
     form = await request.form()
     uploaded = form.get("photo")
-    if uploaded is None or not hasattr(uploaded, "read"):
+    if not isinstance(uploaded, UploadFile):
         return page1_preview(sid, sess)
 
     photo_bytes = await uploaded.read()
