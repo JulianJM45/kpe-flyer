@@ -1,8 +1,6 @@
 """Tests für app.render.render_pdf (Python-Wrapper um typst)."""
-import pytest
 
 from app.render import render_pdf
-
 
 DEFAULTS = dict(
     stamm="Teststadt",

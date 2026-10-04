@@ -1,7 +1,7 @@
 """Integrationstests für die FastHTML-HTTP-API."""
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 
 from main import app
 

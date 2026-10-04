@@ -20,7 +20,7 @@ class Session:
     form_data: dict
     wolf:   PhotoSlot = field(default_factory=PhotoSlot)
     pfadi:  PhotoSlot = field(default_factory=PhotoSlot)
-    raider: PhotoSlot = field(default_factory=lambda: PhotoSlot(x=-62.0, y=2.0, z=1.1))
+    raider: PhotoSlot = field(default_factory=lambda: PhotoSlot(x=62.0, y=2.0, z=1.1))
     svg_page1: bytes | None = None
     svg_page2: bytes | None = None
     svg_version: int = 0

@@ -8,8 +8,11 @@ from starlette.staticfiles import StaticFiles
 
 from app.compose import COMPOSITORS
 from app.render import (
-    compile_pdf, render_page1, render_page1_without_slot,
-    render_pages, render_pdf,
+    compile_pdf,
+    render_page1,
+    render_page1_without_slot,
+    render_pages,
+    render_pdf,
 )
 from app.session import PhotoSlot, apply_move, create_session, get_session
 from app.ui import error_page, index_page, page1_preview, preview_page

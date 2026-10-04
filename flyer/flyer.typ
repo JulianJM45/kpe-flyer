@@ -183,7 +183,7 @@
   )
 }
 
-#let raider-photo(path, rax:-62mm, ray:2mm, raz:1.1) = {
+#let raider-photo(path, rax:0mm, ray:0mm, raz:1.0) = {
   let w = 13cm
   let h = 14cm
   let img-fill = tiling(
