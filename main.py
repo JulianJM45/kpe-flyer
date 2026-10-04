@@ -26,15 +26,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ── Main form ─────────────────────────────────────────────────────────────────
 
-@rt("/")
-def get():
+@rt("/", methods="get")
+def index():
     return index_page()
 
 
 # ── Legacy /render endpoint (direct PDF, no preview) ────────────────────────
 
-@rt("/render")
-async def post(request: Request):
+@rt("/render", methods="post")
+async def render(request: Request):
     d = await request.form()
     try:
         pdf = render_pdf(
@@ -44,7 +44,7 @@ async def post(request: Request):
             str(d.get("geschlecht", "weiblich")) == "weiblich",
             str(d.get("instagram", "")),
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 – HTTP-Grenze: jeder Fehler wird als error_page zurückgegeben
         return error_page(str(exc))
     import unicodedata
     stamm = str(d.get("stamm", ""))
@@ -59,8 +59,8 @@ async def post(request: Request):
 
 # ── Preview: initial render ───────────────────────────────────────────────────
 
-@rt("/preview")
-async def post(request: Request):
+@rt("/preview", methods="post")
+async def preview(request: Request):
     form = await request.form()
     sid = create_session(dict(form))
     sess = get_session(sid)
@@ -70,15 +70,15 @@ async def post(request: Request):
         sess.svg_page1 = pages[0]
         sess.svg_page2 = pages[1] if len(pages) > 1 else b""
         sess.svg_version = 0
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 – HTTP-Grenze: jeder Fehler wird als error_page zurückgegeben
         return error_page(str(exc))
     return preview_page(sid, sess)
 
 
 # ── SVG file serving ──────────────────────────────────────────────────────────
 
-@rt("/svg/{sid}/{page}/{ver}")
-def get(sid: str, page: int, ver: int):
+@rt("/svg/{sid}/{page}/{ver}", methods="get")
+def svg(sid: str, page: int, ver: int):
     sess = get_session(sid)
     if not sess:
         return Response("Session nicht gefunden", status_code=404)
@@ -99,8 +99,8 @@ _EXT_MAP = {
 }
 
 
-@rt("/preview/{sid}/photo/{slot_name}")
-async def post(request: Request, sid: str, slot_name: str):
+@rt("/preview/{sid}/photo/{slot_name}", methods="post")
+async def upload_photo(request: Request, sid: str, slot_name: str):
     if slot_name not in _PHOTO_SLOTS:
         return Response("Ungültiger Slot", status_code=400)
     sess = get_session(sid)
@@ -133,7 +133,7 @@ async def post(request: Request, sid: str, slot_name: str):
         sess.svg_page1 = page1_png
         sess.page1_bases[slot_name] = base_png
         sess.svg_version += 1
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 – HTTP-Grenze: jeder Fehler wird als error_page zurückgegeben
         return error_page(str(exc))
 
     return page1_preview(sid, sess)
@@ -141,8 +141,8 @@ async def post(request: Request, sid: str, slot_name: str):
 
 # ── Photo position / zoom ─────────────────────────────────────────────────────
 
-@rt("/preview/{sid}/move/{slot_name}")
-async def post(request: Request, sid: str, slot_name: str):
+@rt("/preview/{sid}/move/{slot_name}", methods="post")
+async def move_photo(request: Request, sid: str, slot_name: str):
     if slot_name not in _PHOTO_SLOTS:
         return Response("Ungültiger Slot", status_code=400)
     sess = get_session(sid)
@@ -163,14 +163,14 @@ async def post(request: Request, sid: str, slot_name: str):
                 compositor, base, slot.photo_bytes, slot.x, slot.y, slot.z
             )
             sess.svg_version += 1
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 – HTTP-Grenze: jeder Fehler wird als error_page zurückgegeben
             return error_page(str(exc))
     else:
         # Slow path: typst re-render (~480 ms)
         try:
             sess.svg_page1 = await asyncio.to_thread(render_page1, sess)
             sess.svg_version += 1
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 – HTTP-Grenze: jeder Fehler wird als error_page zurückgegeben
             return error_page(str(exc))
 
     return page1_preview(sid, sess)
@@ -178,14 +178,14 @@ async def post(request: Request, sid: str, slot_name: str):
 
 # ── PDF download ──────────────────────────────────────────────────────────────
 
-@rt("/download/{sid}")
-async def post(sid: str):
+@rt("/download/{sid}", methods="post")
+async def download(sid: str):
     sess = get_session(sid)
     if not sess:
         return error_page("Session abgelaufen. Bitte Vorschau neu laden.")
     try:
         pdf = compile_pdf(sess)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 – HTTP-Grenze: jeder Fehler wird als error_page zurückgegeben
         return error_page(str(exc))
 
     stamm = sess.form_data.get("stamm", "stamm")

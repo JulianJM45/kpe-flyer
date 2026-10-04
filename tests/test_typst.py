@@ -30,6 +30,7 @@ def _compile(metadata_content: str, timeout: int = 30) -> bytes:
             capture_output=True,
             text=True,
             timeout=timeout,
+            check=False,
         )
         assert result.returncode == 0, (
             f"typst compile fehlgeschlagen:\n{result.stderr or result.stdout}"

@@ -2,15 +2,15 @@ from fasthtml.common import *
 
 from app.session import PhotoSlot, Session
 
-PLACEHOLDERS = dict(
-    stamm="z.B. München",
-    plz="z.B. 81739 München",
-    address="z.B. Maximilian-Kolbe-Allee 18",
-    grouptime="z.B. Freitag, 16.00-18.00 Uhr",
-    sfm="z.B. Vroni Spörl",
-    mail="z.B. stammstjakobus@gmail.com",
-    phone="z.B. 01577774472",
-)
+PLACEHOLDERS = {
+    "stamm": "z.B. München",
+    "plz": "z.B. 81739 München",
+    "address": "z.B. Maximilian-Kolbe-Allee 18",
+    "grouptime": "z.B. Freitag, 16.00-18.00 Uhr",
+    "sfm": "z.B. Vroni Spörl",
+    "mail": "z.B. stammstjakobus@gmail.com",
+    "phone": "z.B. 01577774472",
+}
 
 _SUBMIT_JS = Script("""
     document.getElementById('flyerForm').addEventListener('submit', function (e) {

@@ -93,6 +93,7 @@ def _run_typst(sess: Session, fmt: str) -> list[bytes] | bytes:
             capture_output=True,
             text=True,
             timeout=30,
+            check=False,
         )
         if result.returncode != 0:
             raise RuntimeError(result.stderr or result.stdout or "Typst konnte das Dokument nicht rendern.")
