@@ -68,7 +68,7 @@ def _composite(
         assert img_h_px is not None
         img_w_px = round(ow * img_h_px / oh)
 
-    photo = photo.resize((img_w_px, img_h_px), Image.LANCZOS)
+    photo = photo.resize((img_w_px, img_h_px), Image.Resampling.LANCZOS)
 
     # Polygon mask in page pixels
     mask = Image.new("L", (page_w, page_h), 0)

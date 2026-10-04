@@ -2,23 +2,23 @@
 
 from app.render import render_pdf
 
-DEFAULTS = dict(
-    stamm="Teststadt",
-    plz="12345 Teststadt",
-    address="Musterstraße 1",
-    grouptime="Samstag, 14.00-16.00 Uhr",
-    sfm="Max Mustermann",
-    mail="test@example.com",
-    phone="0123456789",
-    wichtel=False,
-    two_weeks=False,
-    stammesmeisterin=False,
-    instagram="",
-)
+DEFAULTS = {
+    "stamm": "Teststadt",
+    "plz": "12345 Teststadt",
+    "address": "Musterstraße 1",
+    "grouptime": "Samstag, 14.00-16.00 Uhr",
+    "sfm": "Max Mustermann",
+    "mail": "test@example.com",
+    "phone": "0123456789",
+    "wichtel": False,
+    "two_weeks": False,
+    "stammesmeisterin": False,
+    "instagram": "",
+}
 
 
 def _render(**overrides) -> bytes:
-    kw = {**DEFAULTS, **overrides}
+    kw: dict = {**DEFAULTS, **overrides}
     return render_pdf(**kw)
 
 
