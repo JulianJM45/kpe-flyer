@@ -6,6 +6,6 @@
 #let MAIL = "stammstjakobus@gmail.com"
 #let PHONE = "01577774472"
 #let INSTAGRAM = "@muenchen"
-#let WICHTEL = false
+#let WICHTEL = true
 #let twoWEEKS = false
 #let STAMMESMEISTERIN = true
