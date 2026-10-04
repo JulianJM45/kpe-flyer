@@ -4,8 +4,6 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-import pytest
-
 FLYER_DIR = Path(__file__).parent.parent / "flyer"
 
 

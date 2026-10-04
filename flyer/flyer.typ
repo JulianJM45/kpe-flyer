@@ -165,12 +165,11 @@
 
 #let pfadi-photo(path, pfx:0mm, pfy:0mm, pfz:1.0) = {
   let w = 12cm
+  let h = 8.4cm
   let img-fill = tiling(
     offset: (pfx, pfy),
     image(path, width: w * pfz)
   )
-  let w = 12cm
-  let h = 8.4cm
   place(bottom + left, dx: 9.9cm, dy: 0cm,
     polygon(
       fill: img-fill,
@@ -184,7 +183,7 @@
   )
 }
 
-#let raider-photo(path, rax:-62mm, ray:2mm, raz:1.1) = {
+#let raider-photo(path, rax:0mm, ray:0mm, raz:1.0) = {
   let w = 13cm
   let h = 14cm
   let img-fill = tiling(

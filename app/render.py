@@ -1,9 +1,16 @@
+import io
 import shutil
 import subprocess
 import tempfile
+from copy import deepcopy
 from pathlib import Path
 
+from PIL import Image as PILImage
+
 from app.session import PhotoSlot, Session
+
+PREVIEW_PPI = 96   # used for interactive page-1 renders
+FULL_PPI    = 96   # same for page-2 (rendered once, cached)
 
 FLYER_DIR = Path(__file__).parent.parent / "flyer"
 
@@ -41,16 +48,16 @@ def _build_metadata(sess: Session) -> str:
         f'#let twoWEEKS = {"true" if "two_weeks" in d else "false"}\n'
         f'#let STAMMESMEISTERIN = {"true" if d.get("geschlecht", "weiblich") == "weiblich" else "false"}\n'
         f'#let WOLF_PHOTO = "{photo_path(sess.wolf, "wolf")}"\n'
-        f'#let WOLF_X = {_fmt(sess.wolf.x)}mm\n'
-        f'#let WOLF_Y = {_fmt(sess.wolf.y)}mm\n'
+        f'#let WOLF_X = {_fmt(-sess.wolf.x)}mm\n'
+        f'#let WOLF_Y = {_fmt(-sess.wolf.y)}mm\n'
         f'#let WOLF_Z = {_fmt(sess.wolf.z)}\n'
         f'#let PFADI_PHOTO = "{photo_path(sess.pfadi, "pfadi")}"\n'
-        f'#let PFX = {_fmt(sess.pfadi.x)}mm\n'
-        f'#let PFY = {_fmt(sess.pfadi.y)}mm\n'
+        f'#let PFX = {_fmt(-sess.pfadi.x)}mm\n'
+        f'#let PFY = {_fmt(-sess.pfadi.y)}mm\n'
         f'#let PFZ = {_fmt(sess.pfadi.z)}\n'
         f'#let RAIDER_PHOTO = "{photo_path(sess.raider, "raider")}"\n'
-        f'#let RAX = {_fmt(sess.raider.x)}mm\n'
-        f'#let RAY = {_fmt(sess.raider.y)}mm\n'
+        f'#let RAX = {_fmt(-sess.raider.x)}mm\n'
+        f'#let RAY = {_fmt(-sess.raider.y)}mm\n'
         f'#let RAZ = {_fmt(sess.raider.z)}\n'
     )
 
@@ -72,9 +79,13 @@ def _run_typst(sess: Session, fmt: str) -> list[bytes] | bytes:
         if fmt == "pdf":
             out_pattern = str(tmp_path / "out.pdf")
             extra_args: list[str] = []
-        else:
+        elif fmt == "png1":
+            # page 1 only, preview PPI
             out_pattern = str(tmp_path / "out-{p}.png")
-            extra_args = ["--ppi", "144"]
+            extra_args = ["--ppi", str(PREVIEW_PPI), "--pages", "1"]
+        else:  # "png"
+            out_pattern = str(tmp_path / "out-{p}.png")
+            extra_args = ["--ppi", str(FULL_PPI)]
 
         result = subprocess.run(
             ["typst", "compile", "--font-path", str(flyer_tmp / "fonts"), *extra_args, "flyer.typ", out_pattern],
@@ -98,20 +109,53 @@ def _run_typst(sess: Session, fmt: str) -> list[bytes] | bytes:
         return pages
 
 
-def render_svgs(sess: Session) -> list[bytes]:
-    result = _run_typst(sess, "svg")
+def render_pages(sess: Session) -> list[bytes]:
+    """Render all pages as PNG (called once per session at preview start)."""
+    result = _run_typst(sess, "png")
     assert isinstance(result, list)
     return result
 
 
-def render_page1_svg(sess: Session) -> bytes:
-    return render_svgs(sess)[0]
+def render_page1(sess: Session) -> bytes:
+    """Render only page 1 as PNG at PREVIEW_PPI (fast, ~0.5 s)."""
+    result = _run_typst(sess, "png1")
+    assert isinstance(result, list)
+    return result[0]
+
+
+def render_page1_without_slot(sess: Session, slot_name: str) -> bytes:
+    """
+    Render page 1 with `slot_name` replaced by a solid background-colour
+    image. The result is used as the PIL compositing base for that slot.
+    """
+    blank = _make_blank_png()
+    tmp = deepcopy(sess)
+    slot: PhotoSlot = getattr(tmp, slot_name)
+    slot.photo_bytes = blank
+    slot.photo_ext = ".png"
+    slot.x = slot.y = 0.0
+    slot.z = 1.0
+    return render_page1(tmp)
+
+
+def _make_blank_png() -> bytes:
+    """2×2 pixel PNG filled with the page background colour (#F2F7FA)."""
+    img = PILImage.new("RGB", (2, 2), (242, 247, 250))
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
 
 
 def compile_pdf(sess: Session) -> bytes:
     result = _run_typst(sess, "pdf")
     assert isinstance(result, bytes)
     return result
+
+
+# ── back-compat shims (used by legacy /render route) ─────────────────────────
+
+render_svgs = render_pages
+render_page1_svg = render_page1
 
 
 # ── Legacy helper (keep old route working) ───────────────────────────────────

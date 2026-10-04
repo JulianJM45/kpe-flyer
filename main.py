@@ -1,3 +1,4 @@
+import asyncio
 import mimetypes
 from pathlib import Path
 
@@ -5,7 +6,14 @@ from fasthtml.common import *
 from starlette.responses import Response
 from starlette.staticfiles import StaticFiles
 
-from app.render import compile_pdf, render_page1_svg, render_pdf, render_svgs
+from app.compose import COMPOSITORS
+from app.render import (
+    compile_pdf,
+    render_page1,
+    render_page1_without_slot,
+    render_pages,
+    render_pdf,
+)
 from app.session import PhotoSlot, apply_move, create_session, get_session
 from app.ui import error_page, index_page, page1_preview, preview_page
 
@@ -58,7 +66,7 @@ async def post(request: Request):
     sess = get_session(sid)
     assert sess is not None
     try:
-        pages = render_svgs(sess)
+        pages = await asyncio.to_thread(render_pages, sess)
         sess.svg_page1 = pages[0]
         sess.svg_page2 = pages[1] if len(pages) > 1 else b""
         sess.svg_version = 0
@@ -109,16 +117,21 @@ async def post(request: Request, sid: str, slot_name: str):
         return page1_preview(sid, sess)
 
     ct = uploaded.content_type or "image/jpeg"
-    ext = _EXT_MAP.get(ct) or (
-        mimetypes.guess_extension(ct) or ".jpg"
-    )
+    ext = _EXT_MAP.get(ct) or (mimetypes.guess_extension(ct) or ".jpg")
 
     slot: PhotoSlot = getattr(sess, slot_name)
     slot.photo_bytes = photo_bytes
     slot.photo_ext = ext
+    slot.x = slot.y = 0.0  # reset position on new upload
 
     try:
-        sess.svg_page1 = render_page1_svg(sess)
+        # Render page 1 WITH photo  +  blank base for PIL, concurrently
+        page1_png, base_png = await asyncio.gather(
+            asyncio.to_thread(render_page1, sess),
+            asyncio.to_thread(render_page1_without_slot, sess, slot_name),
+        )
+        sess.svg_page1 = page1_png
+        sess.page1_bases[slot_name] = base_png
         sess.svg_version += 1
     except Exception as exc:
         return error_page(str(exc))
@@ -141,11 +154,24 @@ async def post(request: Request, sid: str, slot_name: str):
     slot: PhotoSlot = getattr(sess, slot_name)
     apply_move(slot, direction)
 
-    try:
-        sess.svg_page1 = render_page1_svg(sess)
-        sess.svg_version += 1
-    except Exception as exc:
-        return error_page(str(exc))
+    base = sess.page1_bases.get(slot_name)
+    if slot.photo_bytes and base:
+        # Fast path: PIL composite, no typst (~50 ms)
+        try:
+            compositor = COMPOSITORS[slot_name]
+            sess.svg_page1 = await asyncio.to_thread(
+                compositor, base, slot.photo_bytes, slot.x, slot.y, slot.z
+            )
+            sess.svg_version += 1
+        except Exception as exc:
+            return error_page(str(exc))
+    else:
+        # Slow path: typst re-render (~480 ms)
+        try:
+            sess.svg_page1 = await asyncio.to_thread(render_page1, sess)
+            sess.svg_version += 1
+        except Exception as exc:
+            return error_page(str(exc))
 
     return page1_preview(sid, sess)
 
